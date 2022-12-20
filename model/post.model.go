@@ -42,10 +42,10 @@ type OrdinaryUser struct {
 
 
 type Organization struct {
-	Id       			int    `json:"user_id"`
-	Location 			string `json:"location"`
+	Id       		int    `json:"user_id"`
+	Location 		string `json:"location"`
 	Organized_events 	string `json:"organized_events"`
-	User     			string `json:"user"` //forieng key reference to user
+	User     		string `json:"user"` //forieng key reference to user
 }
 
 
@@ -71,30 +71,30 @@ type Event struct {
 
 type Bookmarks struct {
 	gorm.Model
-	User_Id 				string `json:"user_id"` //forieng key reference to user
-	Event_Id 				string `json:"event_id"` //forieng key reference to event
+	User_Id 		string `json:"user_id"` //forieng key reference to user
+	Event_Id 		string `json:"event_id"` //forieng key reference to event
 }
 
 type Applied_events struct {
 	gorm.Model
-	User_Id 				string `json:"user_id"` //forieng key reference to user
-	Event_Id 				string `json:"event_id"` //forieng key reference to event
-	Application_status 		string `json:"application_status"`
+	User_Id 		string `json:"user_id"` //forieng key reference to user
+	Event_Id 		string `json:"event_id"` //forieng key reference to event
+	Application_status 	string `json:"application_status"`
 	Participation_status 	bool 	`json:"participation_status"`
 }
 
 
 type Posted_events struct {
 	gorm.Model
-	User_Id 				string `json:"user_id"` //forieng key reference to user
-	Event_Id 				string `json:"event_id"` //forieng key reference to event
-	Application_count 		int 	`json:"application_count"`
+	User_Id 		string `json:"user_id"` //forieng key reference to user
+	Event_Id 		string `json:"event_id"` //forieng key reference to event
+	Application_count 	int 	`json:"application_count"`
 }
 
 type Admin struct {
-	ID       				int    `json:"id" `
-	Username 				string `json:"username" gorm:"primary_key"`
-	Password 				string `json:"password"`
+	ID       		int    `json:"id" `
+	Username 		string `json:"username" gorm:"primary_key"`
+	Password 		string `json:"password"`
 }
 
 //to store mail verification details
