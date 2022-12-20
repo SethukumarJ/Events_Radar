@@ -9,6 +9,7 @@ import (
 type UserRepository interface {
 	InsertUser(user *model.User) (int, error)
 	FindUser(id int) (*model.User, error)
+	StoreVerificationDetails(email string, code int) error
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -71,3 +72,15 @@ func(u *userRepo)  FindUser(email string) (*model.User, error) {
 	return &user, err
 }
 
+// StoreVerificationDetails will store the verification details
+
+func(u *userRepo) StoreVerificationDetails(email string, code int) error {
+
+	var err error
+	query := `INSERT INTO 
+				verification (email, code) VALUES 
+				($1, $2)`
+
+	err = u.db.QueryRow(query, email, code).Err()
+	return err
+}
