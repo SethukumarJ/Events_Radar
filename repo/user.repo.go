@@ -17,8 +17,8 @@ type userRepo struct {
 }
 
 // NewUserRepo will create an object that represent the UserRepo's repository interface
-func NewUserRepo(db *sql.DB) *UserRepo {
-	return &UserRepo{
+func NewUserRepo(db *sql.DB) *userRepo {
+	return &userRepo{
 		db: db,
 	}
 }
@@ -52,10 +52,6 @@ func (u *userRepo) InsertUser(user *model.User) (string, error) {
 	
 	return username, err
 }
-
-
-
-
 
 // FindUser will return a user with a given email
 func(u *userRepo)  FindUser(email string) (*model.User, error) {
