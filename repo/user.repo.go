@@ -9,7 +9,7 @@ import (
 // UserRepository represent the users's repository contract
 type UserRepository interface {
 	InsertUser(user *model.User) (string, error)
-	FindUser(email string) (*model.User, error)
+	FindUser(email string) (model.UserResponse, error)
 	StoreVerificationDetails(email string, code int) error
 	VerifiyAccount(email string, code int) error
 }
@@ -57,9 +57,9 @@ func (u *userRepo) InsertUser(user *model.User) (string, error) {
 }
 
 // FindUser will return a user with a given email
-func (u *userRepo) FindUser(email string) (*model.User, error) {
+func (u *userRepo) FindUser(email string) (model.UserResponse, error) {
 	var err error
-	var user model.User
+	var user model.UserResponse
 	query := `SELECT * FROM users WHERE username = $1;`
 	err = u.db.QueryRow(query, email).Scan(
 		&user.Id,
@@ -71,7 +71,7 @@ func (u *userRepo) FindUser(email string) (*model.User, error) {
 		&user.Password,
 		&user.Profile,
 	)
-	return &user, err
+	return user, err
 }
 
 
