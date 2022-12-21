@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"log"
 	"radar/model"
 )
 
@@ -10,6 +11,7 @@ type UserRepository interface {
 	InsertUser(user *model.User) (int, error)
 	FindUser(id int) (*model.User, error)
 	StoreVerificationDetails(email string, code int) error
+	VerifiyAccount(email string, code int) error
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -38,7 +40,7 @@ func (u *userRepo) InsertUser(user *model.User) (string, error) {
 		password,
 		profile,
 	VALUES ($1,$2,$3,$4,$5,$6,$7,$8) 
-	RETURNING id`
+	RETURNING username;`
 	err = u.db.QueryRow(
 		query,
 		user.Id,
@@ -49,16 +51,16 @@ func (u *userRepo) InsertUser(user *model.User) (string, error) {
 		user.Username,
 		user.Password,
 		user.Profile,
-		).Scan(&username)
-	
+	).Scan(&username)
+
 	return username, err
 }
 
 // FindUser will return a user with a given email
-func(u *userRepo)  FindUser(email string) (*model.User, error) {
+func (u *userRepo) FindUser(email string) (*model.User, error) {
 	var err error
 	var user model.User
-	query := `SELECT * FROM users WHERE username = $1`
+	query := `SELECT * FROM users WHERE username = $1;`
 	err = u.db.QueryRow(query, email).Scan(
 		&user.Id,
 		&user.First_Name,
@@ -74,13 +76,43 @@ func(u *userRepo)  FindUser(email string) (*model.User, error) {
 
 // StoreVerificationDetails will store the verification details
 
-func(u *userRepo) StoreVerificationDetails(email string, code int) error {
+func (u *userRepo) StoreVerificationDetails(email string, code int) error {
 
 	var err error
 	query := `INSERT INTO 
 				verification (email, code) VALUES 
-				($1, $2)`
+				($1, $2);`
 
 	err = u.db.QueryRow(query, email, code).Err()
 	return err
+}
+
+// VerifiyAccount will verify the user account
+
+func (u *userRepo) VerifiyAccount(email string, code int) error {
+
+	var id int
+	var err error
+
+	query := `SELECT id FROM 
+				verification WHERE 
+				email = $1 AND code = $2;`
+	err = u.db.QueryRow(query, email, code).Scan(&id)
+
+	if err != nil {
+		return err
+	}
+
+	query = `UPDATE users SET
+				verification = true WHERE
+				email = $1;`
+
+	err = u.db.QueryRow(query, email).Err()
+	log.Println("Updating User verification status", err)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
