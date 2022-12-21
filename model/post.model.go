@@ -14,14 +14,14 @@ type User struct {
 	Last_Name        	string `json:"last_name"`
 	Email            	string `json:"email" gorm:"not null;unique"`
 	Username			string `json:"username" gorm:"not null;unique"`
-  Phone            	int64  `json:"phone_number"`
+  	Phone            	int64  `json:"phone_number"`
 	Password         	string `json:"password"`
 	Verified         	bool   `json:"verified" gorm:"default:false"`
 	Verification     	bool   `json:"verification" gorm:"default:false"`
 	Profile          	string `json:"profile"`
-	Events_Id			    string `json:"events_id"` //forieng key reference to events
+	Events_Id			string `json:"events_id"` //forieng key reference to events
 	Notification_Id		string `json:"notification_id"` //forieng key reference to notification
-	TimeLine_Id			   string `json:"timeline_id"` //forieng key reference to timeline
+	TimeLine_Id			string `json:"timeline_id"` //forieng key reference to timeline
 	
 }
 
@@ -31,8 +31,8 @@ type Bio struct {
 	Linked_in        	string `json:"linked in"`
 	Instagram        	string `json:"instagram"`
 	Github           	string `json:"github"`
-	Facebook           string `json:"facebook"`
-	User			 	      string `json:"user"` //forieng key reference to user
+	Facebook           	string `json:"facebook"`
+	User			 	string `json:"user"` //forieng key reference to user
 }
 
 type OrdinaryUser struct {
@@ -47,7 +47,7 @@ type Organization struct {
 
 	Id       			    int    `json:"user_id"`
 	Location 			    string `json:"location"`
-	Organized_events 	string `json:"organized_events"`
+	Organized_events 		string `json:"organized_events"`
 	User     			    string `json:"user"` //forieng key reference to user
 
 }
@@ -103,12 +103,6 @@ type Admin struct {
 	ID       				int    `json:"id" `
 	Username 				string `json:"username" gorm:"primary_key"`
 	Password 				string `json:"password"`
-
-
-type Admin struct {
-	ID       		int    `json:"id" `
-	Username 		string `json:"username" gorm:"primary_key"`
-	Password 		string `json:"password"`
 
 }
 
