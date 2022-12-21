@@ -23,9 +23,9 @@ func NewAdminRepo(db *sql.DB) AdminRepository {
 func (a *adminRepo) CreateAdmin(admin model.Admin)error {
 	var err error
 	query := `INSERT INTO admins (
-		username,
-		password,
-	) VALUES ($1,$2);`
+					username,
+					password,
+			) VALUES ($1,$2);`
 
 	 err = a.db.QueryRow(query,
 		admin.Username,
