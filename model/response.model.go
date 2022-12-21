@@ -8,6 +8,7 @@ type UserResponse struct {
 	Id              int    `json:"user_id"`
 	First_Name      string `json:"first_name"`
 	Last_Name       string `json:"last_name"`
+	Username		string `json:"username" gorm:"not null;unique"`
 	Email           string `json:"email" gorm:"not null;unique"`
 	Phone           int64  `json:"phone_number"`
 	Password        string `json:"password,omitempty"`
