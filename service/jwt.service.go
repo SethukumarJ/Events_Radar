@@ -42,10 +42,10 @@ func NewJWTAdminService() JWTService {
 	}
 }
 
-func (j *jwtService) GenerateToken(userId int, email, role string) string {
+func (j *jwtService) GenerateToken(userId int, username, role string) string {
 	claims := &SignedDetails{
 		userId,
-		email,
+		username,
 		role,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Local().Add(time.Minute * time.Duration(2)).Unix(),
