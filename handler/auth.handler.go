@@ -123,3 +123,27 @@ func (c *authHandler) AdminRefreshToken() http.HandlerFunc {
 
 	}
 }
+
+
+// UserSignup handles the user signup
+// AdminSignup handles the admin signup
+func (h *authHandler) UserSignup() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		var newUser model.Admin
+
+		//fetching the data from the request
+		json.NewDecoder(r.Body).Decode(&newUser)
+
+		err := h.adminService.CreateAdmin(newUser)
+
+		if err != nil {
+			response := response.ErrorResponse("Failed to create admin", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+	}
+
+}
