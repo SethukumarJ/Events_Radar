@@ -7,6 +7,7 @@ import (
 	"radar/model"
 	"radar/service"
 	"radar/utils"
+	"strings"
 )
 
 // AuthHandler interface
@@ -76,7 +77,7 @@ func (h *authHandler) AdminLogin() http.HandlerFunc {
 		json.NewDecoder(r.Body).Decode(&adminLogin)
 
 		//verifying the admin
-		_,err := h.authService.VerifyAdmin(adminLogin.Username, adminLogin.Password)
+		_, err := h.authService.VerifyAdmin(adminLogin.Username, adminLogin.Password)
 
 		if err != nil {
 			response := response.ErrorResponse("Failed to login", err.Error(), nil)
@@ -88,12 +89,37 @@ func (h *authHandler) AdminLogin() http.HandlerFunc {
 
 		//getting admin values
 		admin, err := h.adminService.FindAdmin(adminLogin.Username)
-		token  := h.jwtAdminService.GenerateToken(admin.ID,admin.Username, "admin")
+		token := h.jwtAdminService.GenerateToken(admin.ID, admin.Username, "admin")
 		admin.Password = ""
 		admin.Token = token
-		response := response.SuccessResponse(true,"Login successful", admin.Token)
+		response := response.SuccessResponse(true, "Login successful", admin.Token)
 		utils.ResponseJSON(w, response)
 
-		
+	}
+}
+
+// admin refresh token
+func (c *authHandler) AdminRefreshToken() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		autheader := r.Header.Get("Authorization")
+		bearerToken := strings.Split(autheader, " ")
+		token := bearerToken[1]
+
+		refreshToken, err := c.jwtAdminService.GenerateRefreshToken(token)
+
+		if err != nil {
+			response := response.ErrorResponse("error generating refresh token", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "SUCCESS", refreshToken)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
 	}
 }
