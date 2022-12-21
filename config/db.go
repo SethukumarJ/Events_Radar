@@ -3,14 +3,16 @@ package config
 import (
 	"log"
 	"os"
+	"radar/model"
 
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func Init() *gorm.DB {
 
 	dbURL := os.Getenv("DB_SOURCE")
-	db, err := gorm.Open(postges.Open(dbURL), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
