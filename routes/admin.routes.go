@@ -1,6 +1,7 @@
 package routes
 
 import (
+
 	h "radar/handler"
 	m "radar/middleware"
 
@@ -36,5 +37,4 @@ func (r *adminRoute) AdminRouter(routes chi.Router,
 		r.Get("/admin/token/refresh", authHandler.AdminRefreshToken())
 
 	})
-
 }
