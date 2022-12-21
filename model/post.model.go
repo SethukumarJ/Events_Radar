@@ -8,12 +8,13 @@ import (
 type User struct {
 	gorm.Model
 
+
 	Id               	int64    `json:"user_id"`
 	First_Name       	string `json:"first_name"`
 	Last_Name        	string `json:"last_name"`
 	Email            	string `json:"email" gorm:"not null;unique"`
 	Username			string `json:"username" gorm:"not null;unique"`
-	Phone            	int64  `json:"phone_number"`
+  	Phone            	int64  `json:"phone_number"`
 	Password         	string `json:"password"`
 	Verified         	bool   `json:"verified" gorm:"default:false"`
 	Verification     	bool   `json:"verification" gorm:"default:false"`
@@ -43,10 +44,12 @@ type OrdinaryUser struct {
 
 
 type Organization struct {
-	Id       			int    `json:"user_id"`
-	Location 			string `json:"location"`
-	Organized_events 	string `json:"organized_events"`
-	User     			string `json:"user"` //forieng key reference to user
+
+	Id       			    int    `json:"user_id"`
+	Location 			    string `json:"location"`
+	Organized_events 		string `json:"organized_events"`
+	User     			    string `json:"user"` //forieng key reference to user
+
 }
 
 
@@ -72,30 +75,35 @@ type Event struct {
 
 type Bookmarks struct {
 	gorm.Model
+
 	User_Id 				string `json:"user_id"` //forieng key reference to user
 	Event_Id 				string `json:"event_id"` //forieng key reference to event
+
 }
 
 type Applied_events struct {
 	gorm.Model
-	User_Id 				string `json:"user_id"` //forieng key reference to user
-	Event_Id 				string `json:"event_id"` //forieng key reference to event
+	User_Id 				      string `json:"user_id"` //forieng key reference to user
+	Event_Id 				      string `json:"event_id"` //forieng key reference to event
 	Application_status 		string `json:"application_status"`
+
 	Participation_status 	bool 	`json:"participation_status"`
 }
 
 
 type Posted_events struct {
 	gorm.Model
-	User_Id 				string `json:"user_id"` //forieng key reference to user
-	Event_Id 				string `json:"event_id"` //forieng key reference to event
-	Application_count 		int 	`json:"application_count"`
+
+	User_Id 				    string `json:"user_id"` //forieng key reference to user
+	Event_Id 				    string `json:"event_id"` //forieng key reference to event
+	Application_count 	int 	`json:"application_count"`
 }
 
 type Admin struct {
 	ID       				int    `json:"id" `
 	Username 				string `json:"username" gorm:"primary_key"`
 	Password 				string `json:"password"`
+
 }
 
 //to store mail verification details
