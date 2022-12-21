@@ -178,3 +178,29 @@ func (h *authHandler) UserLogin() http.HandlerFunc {
 
 	}
 }
+
+// user refresh token
+func (c *authHandler) UserRefreshToken() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		autheader := r.Header.Get("Authorization")
+		bearerToken := strings.Split(autheader, " ")
+		token := bearerToken[1]
+
+		refreshToken, err := c.jwtUserService.GenerateRefreshToken(token)
+
+		if err != nil {
+			response := response.ErrorResponse("error generating refresh token", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "SUCCESS", refreshToken)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+	}
+}
