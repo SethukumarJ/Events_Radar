@@ -8,8 +8,8 @@ import (
 
 // UserRepository represent the users's repository contract
 type UserRepository interface {
-	InsertUser(user *model.User) (int, error)
-	FindUser(id int) (*model.User, error)
+	InsertUser(user *model.User) (string, error)
+	FindUser(email string) (*model.User, error)
 	StoreVerificationDetails(email string, code int) error
 	VerifiyAccount(email string, code int) error
 }
@@ -20,7 +20,7 @@ type userRepo struct {
 }
 
 // NewUserRepo will create an object that represent the UserRepo's repository interface
-func NewUserRepo(db *sql.DB) *userRepo {
+func NewUserRepo(db *sql.DB) UserRepository {
 	return &userRepo{
 		db: db,
 	}
@@ -74,6 +74,7 @@ func (u *userRepo) FindUser(email string) (*model.User, error) {
 	return &user, err
 }
 
+
 // StoreVerificationDetails will store the verification details
 
 func (u *userRepo) StoreVerificationDetails(email string, code int) error {
@@ -86,6 +87,7 @@ func (u *userRepo) StoreVerificationDetails(email string, code int) error {
 	err = u.db.QueryRow(query, email, code).Err()
 	return err
 }
+
 
 // VerifiyAccount will verify the user account
 
