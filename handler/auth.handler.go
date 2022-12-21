@@ -147,3 +147,34 @@ func (h *authHandler) UserSignup() http.HandlerFunc {
 	}
 
 }
+
+// UserLogin handles the admin login
+func (h *authHandler) UserLogin() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		var userLogin model.Admin
+
+		//fetching the data from the request
+		json.NewDecoder(r.Body).Decode(&userLogin)
+
+		//verifying the admin
+		_, err := h.authService.VerifyAdmin(userLogin.Username, userLogin.Password)
+
+		if err != nil {
+			response := response.ErrorResponse("Failed to login", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		//getting user values
+		user, err := h.adminService.FindAdmin(userLogin.Username)
+		token := h.jwtAdminService.GenerateToken(user.ID, user.Username, "user")
+		user.Password = ""
+		user.Token = token
+		response := response.SuccessResponse(true, "Login successful", user.Token)
+		utils.ResponseJSON(w, response)
+
+	}
+}
