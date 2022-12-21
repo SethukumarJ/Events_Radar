@@ -18,7 +18,7 @@ type userHandler struct {
 	userService service.UserService
 }
 
-func newUserHandler(userService service.UserService) UserHandler {
+func NewUserHandler(userService service.UserService) UserHandler {
 	return &userHandler{
 		userService: userService,
 	}
@@ -29,9 +29,10 @@ func newUserHandler(userService service.UserService) UserHandler {
 func (h *userHandler) SendVerificationMail() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		email := r.URL.Query().Get("email")
+		username := r.URL.Query().Get("Username")
+		email := r.URL.Query().Get("Email")
 
-		_, err := h.userService.FindUser(email)
+		_, err := h.userService.FindUser(username)
 		if err == nil {
 			err = h.userService.SendVerificationEmail(email)
 		}
