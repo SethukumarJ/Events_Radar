@@ -100,8 +100,8 @@ type Posted_events struct {
 }
 
 type Admin struct {
-	ID       				int    `json:"id" `
-	Username 				string `json:"username" gorm:"primary_key"`
+	ID       				int    `json:"id" gorm:"primary_key"`
+	Username 				string `json:"username"`
 	Password 				string `json:"password"`
 
 }
