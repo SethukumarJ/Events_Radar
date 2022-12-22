@@ -8,13 +8,15 @@ type UserResponse struct {
 	Id              int    `json:"user_id"`
 	First_Name      string `json:"first_name"`
 	Last_Name       string `json:"last_name"`
+
   	Username		string `json:"username"`
 	Email           string `json:"email" gorm:"not null;unique"`
   	Phone           int64  `json:"phone_number"`
+
 	Password        string `json:"password,omitempty"`
 	Verified        bool   `json:"verified"`
 	Profile         string `json:"profile"`
-	Token			string `json:"token"`
+	Token			      string `json:"token"`
 
 
 }
@@ -48,5 +50,5 @@ type AdminResponse struct {
 	ID       				int    `json:"id" `
 	Username 				string `json:"username"`
 	Password 				string `json:"password"`
-	Token					string `json:"token"`
+	Token					  string `json:"token"`
 }
