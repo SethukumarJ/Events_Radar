@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"log"
 	"radar/model"
 )
 
@@ -20,32 +21,35 @@ func NewAdminRepo(db *sql.DB) AdminRepository {
 	}
 }
 
-func (a *adminRepo) CreateAdmin(admin model.Admin)error {
-	var err error
-	query := `INSERT INTO admins (
-					username,
-					password,
-			) VALUES ($1,$2);`
+func (c *adminRepo) CreateAdmin(admin model.Admin) error {
 
-	 err = a.db.QueryRow(query,
-		admin.Username,
+	query := `INSERT INTO
+				admins (username,password)
+				VALUES
+				($1, $2);`
+	err := c.db.QueryRow(
+		query, admin.Username,
 		admin.Password,
 	).Err()
-
 	return err
-
 }
 
-func (a *adminRepo) FindAdmin(username string) (model.AdminResponse, error) {
+func (c *adminRepo) FindAdmin(username string) (model.AdminResponse, error) {
+
+	log.Println("username of admin:", username)
 	var admin model.AdminResponse
-	query := `SELECT id,
-			 		username,
-					password
-					FROM admins WHERE username=$1;`
-	err := a.db.QueryRow(query, username).Scan(
+
+	query := `SELECT
+			id, 
+			username,
+			password
+			FROM admins WHERE username = $1;`
+
+	err := c.db.QueryRow(query,
+		username).Scan(
 		&admin.ID,
 		&admin.Username,
-		&admin.Password,
-	)
+		&admin.Password)
+
 	return admin, err
 }

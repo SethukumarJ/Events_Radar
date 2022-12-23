@@ -33,6 +33,7 @@ func NewAdminService(
 }
 
 // FindAdmin finds the admin
+
 func (c *adminService) FindAdmin(username string) (*model.AdminResponse, error) {
 	admin, err := c.adminRepo.FindAdmin(username)
 

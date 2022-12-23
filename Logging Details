@@ -25,3 +25,60 @@
 2022/12/22 07:21:06 Api is listening on port: 8080
 2022/12/22 07:22:33 /nConnected to database events_radar
 2022/12/22 07:22:33 Api is listening on port: 8080
+2022/12/22 13:22:13 /nConnected to database events_radar
+2022/12/22 13:22:13 Api is listening on port: 8080
+2022/12/22 13:25:02 /nConnected to database events_radar
+2022/12/22 13:25:02 Api is listening on port: 8080
+2022/12/22 13:26:09 /nConnected to database events_radar
+2022/12/22 13:26:09 Api is listening on port: 8080
+2022/12/22 13:29:10 /nConnected to database events_radar
+2022/12/22 13:29:10 Api is listening on port: 8080
+2022/12/22 13:32:41 /nConnected to database events_radar
+2022/12/22 13:32:41 Api is listening on port: 8080
+2022/12/22 14:07:05 /nConnected to database events_radar
+2022/12/22 14:07:05 Api is listening on port: 8080
+2022/12/22 14:09:36 Email Id to send message :  sethukumarj.76@gmail.com
+2022/12/22 14:12:31 /nConnected to database events_radar
+2022/12/22 14:12:31 Api is listening on port: 8080
+2022/12/22 14:12:39 Email Id to send message :  sethukumarj.76@gmail.com
+2022/12/22 14:13:38 Updating User verification:  <nil>
+2022/12/22 14:14:53 Updating User verification:  <nil>
+2022/12/22 14:17:50 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0   sourav souravunofficial000@gmail.com 0 12345 false false    }
+2022/12/22 14:27:03 /nConnected to database events_radar
+2022/12/22 14:27:03 Api is listening on port: 8080
+2022/12/22 14:27:06 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0   sourav souravunofficial000@gmail.com 0 12345 false false    }
+2022/12/22 14:27:48 /nConnected to database events_radar
+2022/12/22 14:27:48 Api is listening on port: 8080
+2022/12/22 14:27:54 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0   sourav souravunofficial000@gmail.com 0 12345 false false    }
+2022/12/22 14:35:19 /nConnected to database events_radar
+2022/12/22 14:35:19 Api is listening on port: 8080
+2022/12/22 14:35:22 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0   sourav souravunofficial000@gmail.com 0 12345 false false    }
+2022/12/22 14:35:53 /nConnected to database events_radar
+2022/12/22 14:35:53 Api is listening on port: 8080
+2022/12/22 14:35:55 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0   sourav souravunofficial000@gmail.com 0 12345 false false    }
+2022/12/22 14:37:11 /nConnected to database events_radar
+2022/12/22 14:37:11 Api is listening on port: 8080
+2022/12/22 14:37:13 {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0   sourav souravunofficial000@gmail.com 0 12345 false false    }
+2022/12/22 14:44:03 Email Id to send message :  souravunofficial000@gmail.com
+2022/12/22 14:51:23 Updating User verification:  <nil>
+2022/12/22 17:23:34 username of admin: sourav
+2022/12/22 17:23:34 pq: null value in column "id" of relation "admins" violates not-null constraint
+2022/12/22 17:53:29 /nConnected to database events_radar
+2022/12/22 17:53:29 Api is listening on port: 8080
+2022/12/22 17:54:39 /nConnected to database events_radar
+2022/12/22 17:54:39 Api is listening on port: 8080
+2022/12/22 17:56:51 /nConnected to database events_radar
+2022/12/22 17:56:51 Api is listening on port: 8080
+2022/12/22 17:57:35 /nConnected to database events_radar
+2022/12/22 17:57:35 Api is listening on port: 8080
+2022/12/22 17:57:43 username of admin: sourav
+2022/12/22 17:57:43 username of admin: sourav
+2022/12/22 17:58:50 Email Id to send message :  souravunofficial000@gmail.com
+2022/12/22 17:59:30 Updating User verification:  <nil>
+2022/12/22 18:05:37 Updating User verification:  <nil>
+2022/12/23 16:05:41 /nConnected to database events_radar
+2022/12/23 16:05:41 Api is listening on port: 8080
+2022/12/23 16:06:18 /nConnected to database events_radar
+2022/12/23 16:06:18 Api is listening on port: 8080
+2022/12/23 16:09:30 /nConnected to database events_radar
+2022/12/23 16:09:30 Api is listening on port: 8080

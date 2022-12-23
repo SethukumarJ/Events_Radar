@@ -9,8 +9,8 @@ import (
 
 // AuthService is the interface for authentication service
 type AuthService interface {
-	VerifyAdmin(username, password string) (bool, error)
-	VerifyUser(username, password string) (bool, error)
+	VerifyAdmin(email string, password string) error
+	VerifyUser(email string, password string) error
 }
 
 // authService is the struct for authentication service
@@ -32,32 +32,39 @@ func NewAuthService(
 }
 
 // VerifyAdmin verifies the admin credentials
-func (a *authService) VerifyAdmin(username, password string) (bool, error) {
-	admin, err := a.adminRepo.FindAdmin(username)
+func (c *authService) VerifyAdmin(email, password string) error {
+
+	admin, err := c.adminRepo.FindAdmin(email)
+
+	//_, err = c.adminRepo.FindAdmin(email)
+
 	if err != nil {
-		return false, errors.New("admin not found")
+		return errors.New("Invalid Username/ password, failed to login")
 	}
 
-	if !VerifyPassword(password, admin.Password) {
-		return false, errors.New("invalid password")
+	isValidPassword := VerifyPassword(password, admin.Password)
+	if !isValidPassword {
+		return errors.New("Invalid username/ Password, failed to login")
 	}
 
-	return true, nil
-
+	return nil
 }
 
 // VerifyUser verifies the user credentials
-func (a *authService) VerifyUser(username, password string) (bool, error) {
-	user, err := a.userRepo.FindUser(username)
+func (c *authService) VerifyUser(email string, password string) error {
+
+	user, err := c.userRepo.FindUser(email)
+
 	if err != nil {
-		return false, errors.New("user not found")
+		return errors.New("failed to login. check your email")
 	}
 
-	if !VerifyPassword(password, user.Password) {
-		return false, errors.New("invalid password")
+	isValidPassword := VerifyPassword(password, user.Password)
+	if !isValidPassword {
+		return errors.New("failed to login. check your credential")
 	}
 
-	return true, nil
+	return nil
 }
 
 // VerifyPassword verifies the password

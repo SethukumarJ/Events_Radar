@@ -24,6 +24,21 @@ type User struct {
 	
 }
 
+//to store admin credentials
+type Admin struct {
+	ID       				int    `json:"id" gorm:"primary_key"`
+	Username 				string `json:"username"`
+	Password 				string `json:"password"`
+}
+
+//to store mail verification details
+
+type Verification struct {
+	gorm.Model
+	Email 			string 	`json:"email"`
+	Code  			int    	`json:"code"`
+}
+
 type Bio struct {
 	Id       		 	int    `json:"user_id"`
 	Bio_discription  	string `json:"Bio"`
@@ -92,16 +107,3 @@ type Posted_events struct {
 	Application_count 		int 	`json:"application_count"`
 }
 
-type Admin struct {
-	ID       				int    `json:"id" gorm:"primary_key"`
-	Username 				string `json:"username"`
-	Password 				string `json:"password"`
-}
-
-//to store mail verification details
-
-type Verification struct {
-	gorm.Model
-	Email 			string 	`json:"email"`
-	Code  			int    	`json:"code"`
-}

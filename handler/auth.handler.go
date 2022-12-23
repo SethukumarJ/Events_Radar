@@ -2,6 +2,8 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"radar/common/response"
 	"radar/model"
@@ -46,56 +48,61 @@ func NewAuthHandler(
 }
 
 // AdminSignup handles the admin signup
-func (h *authHandler) AdminSignup() http.HandlerFunc {
+func (c *authHandler) AdminSignup() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var newAdmin model.Admin
 
-		//fetching the data from the request
+		//fetching data
 		json.NewDecoder(r.Body).Decode(&newAdmin)
 
-		err := h.adminService.CreateAdmin(newAdmin)
+		err := c.adminService.CreateAdmin(newAdmin)
 
 		if err != nil {
-			response := response.ErrorResponse("Failed to create admin", err.Error(), nil)
+			response := response.ErrorResponse("Failed to signup", err.Error(), nil)
 			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusUnprocessableEntity)
 			utils.ResponseJSON(w, response)
 			return
 		}
-	}
 
+		admin, _ := c.adminService.FindAdmin(newAdmin.Username)
+		admin.Password = ""
+		response := response.SuccessResponse(true, "SUCCESS", admin)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+	}
 }
 
 // AdminLogin handles the admin login
-func (h *authHandler) AdminLogin() http.HandlerFunc {
+func (c *authHandler) AdminLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var adminLogin model.Admin
 
-		//fetching the data from the request
 		json.NewDecoder(r.Body).Decode(&adminLogin)
 
-		//verifying the admin
-		_, err := h.authService.VerifyAdmin(adminLogin.Username, adminLogin.Password)
+		//verifying  admin credentials
+		err := c.authService.VerifyAdmin(adminLogin.Username, adminLogin.Password)
 
 		if err != nil {
 			response := response.ErrorResponse("Failed to login", err.Error(), nil)
 			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusUnauthorized)
 			utils.ResponseJSON(w, response)
 			return
 		}
 
 		//getting admin values
-		admin, err := h.adminService.FindAdmin(adminLogin.Username)
-		token := h.jwtAdminService.GenerateToken(admin.ID, admin.Username, "admin")
+		admin, _ := c.adminService.FindAdmin(adminLogin.Username)
+		token := c.jwtAdminService.GenerateToken(admin.ID, admin.Username, "admin")
 		admin.Password = ""
 		admin.Token = token
-		response := response.SuccessResponse(true, "Login successful", admin.Token)
+		response := response.SuccessResponse(true, "SUCCESS", admin.Token)
 		utils.ResponseJSON(w, response)
-
 	}
+
 }
 
 // admin refresh token
@@ -123,60 +130,70 @@ func (c *authHandler) AdminRefreshToken() http.HandlerFunc {
 
 	}
 }
-
-
 // UserSignup handles the user signup
-// AdminSignup handles the admin signup
-func (h *authHandler) UserSignup() http.HandlerFunc {
+
+func (c *authHandler) UserSignup() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var newUser model.Admin
-
-		//fetching the data from the request
+		var newUser model.User
+		fmt.Println("user signup")
+		//fetching data
 		json.NewDecoder(r.Body).Decode(&newUser)
 
-		err := h.adminService.CreateAdmin(newUser)
+		//check username exit or not
+
+		err := c.userService.CreateUser(newUser)
+
+		log.Println(newUser)
 
 		if err != nil {
-			response := response.ErrorResponse("Failed to create admin", err.Error(), nil)
+			response := response.ErrorResponse("Failed to create user", err.Error(), nil)
 			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusUnprocessableEntity)
 			utils.ResponseJSON(w, response)
 			return
 		}
-	}
 
+		user, _ := c.userService.FindUser(newUser.Email)
+		user.Password = ""
+		response := response.SuccessResponse(true, "SUCCESS", user)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+	}
 }
 
-// UserLogin handles the admin login
-func (h *authHandler) UserLogin() http.HandlerFunc {
+// UserLogin handles the user login
+
+func (c *authHandler) UserLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var userLogin model.Admin
+		var userLogin model.User
 
-		//fetching the data from the request
 		json.NewDecoder(r.Body).Decode(&userLogin)
 
-		//verifying the admin
-		_, err := h.authService.VerifyAdmin(userLogin.Username, userLogin.Password)
+		//verify User details
+		err := c.authService.VerifyUser(userLogin.Email, userLogin.Password)
 
 		if err != nil {
 			response := response.ErrorResponse("Failed to login", err.Error(), nil)
 			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusUnauthorized)
 			utils.ResponseJSON(w, response)
 			return
 		}
 
-		//getting user values
-		user, err := h.adminService.FindAdmin(userLogin.Username)
-		token := h.jwtAdminService.GenerateToken(user.ID, user.Username, "user")
+		//fetching user details
+		user, _ := c.userService.FindUser(userLogin.Email)
+		token := c.jwtUserService.GenerateToken(user.ID, user.Email, "user")
 		user.Password = ""
 		user.Token = token
-		response := response.SuccessResponse(true, "Login successful", user.Token)
+		response := response.SuccessResponse(true, "SUCCESS", user.Token)
 		utils.ResponseJSON(w, response)
 
+		fmt.Println("login function returned successfully")
 	}
+
 }
 
 // user refresh token
@@ -204,3 +221,4 @@ func (c *authHandler) UserRefreshToken() http.HandlerFunc {
 
 	}
 }
+
