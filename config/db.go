@@ -21,11 +21,11 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&model.Admin{})
 	db.AutoMigrate(&model.Verification{})
 
-	// db.Exec(`INSERT INTO admins (
-	// 			username,password)
-	// 		VALUES (
-	// 			$1,$2)`,
-	// 	"admin@gmail.com", "admin")
+	db.Exec(`INSERT INTO admins (
+				username,password)
+			VALUES (
+				$1,$2)`,
+		"admin@gmail.com", "admin")
 
 	return db
 
