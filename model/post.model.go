@@ -13,7 +13,7 @@ type User struct {
 	Id              int    `json:"user_id"`
 	First_Name      string `json:"first_name"`
 	Last_Name       string `json:"last_name"`
-	Username        string `json:"username"`
+	Username        string `json:"username" gorm:"primary key"`
 	Email           string `json:"email" gorm:"not null;unique"`
 	Phone           int64  `json:"phone_number"`
 	Password        string `json:"password"`
@@ -65,9 +65,10 @@ type Verification struct {
 // }
 
 type Event struct {
-	ID        				 int  	`json:"id,omitempty"`
+	
+	ID        				 int       `json:"id,omitempty"`
 	Created_at               time.Time `json:"created_at"`
-	Organizer                string `json:"user"` //forieng key reference to user
+	Organizer_name         	 string `json:"orginizer_name"` //forieng key reference to user
 	Title                    string `json:"title"`
 	Event_date               string `json:"event_date"`
 	Location                 string `json:"location"`

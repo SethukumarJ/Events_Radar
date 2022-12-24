@@ -141,7 +141,8 @@ func (c *userRepo) CreateEvent(event model.Event) (int, error) {
 
 	query := `INSERT INTO events(
 		created_at,
-		organizer,
+		id,
+		organizer_name,
 		title,
 		event_date,
 		location,
@@ -155,12 +156,13 @@ func (c *userRepo) CreateEvent(event model.Event) (int, error) {
 		sub_events,
 		event_pic
 		)VALUES
-			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
 			RETURNING id;`
 
 	err := c.db.QueryRow(query,
 		event.Created_at,
-		event.Organizer,
+		event.ID,
+		event.Organizer_name,
 		event.Title,
 		event.Event_date,
 		event.Location,

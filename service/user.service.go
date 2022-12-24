@@ -17,6 +17,7 @@ type UserService interface {
 	FindUser(email string) (*model.UserResponse, error)
 	SendVerificationEmail(email string) error
 	VerifyAccount(email string, code int) error
+	CreateEvent(newEvent model.Event) (int, error)
 }
 
 
