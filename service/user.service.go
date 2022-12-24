@@ -121,3 +121,12 @@ func (c *userService) VerifyAccount(email string, code int) error {
 	}
 	return nil
 }
+
+
+func (c *userService) CreateEvent(newEvent model.Event) (int, error) {
+	_, err := c.userRepo.CreateEvent(newEvent)
+	if err != nil {
+		return newEvent.ID, err
+	}
+	return newEvent.ID, nil
+}

@@ -1,29 +1,48 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type UserResponse struct {
 	gorm.Model
 
-	ID              int    `json:"user_id"`
-	First_Name      string `json:"first_name"`
-	Last_Name       string `json:"last_name"`
-	Username		string `json:"username"`
-	Email           string `json:"email"`
-	Phone           int  `json:"phone_number"`
-	Password        string `json:"password,omitempty"`
-	Verified        bool   `json:"verified" gorm:"default:false"`
-	Profile         string `json:"profile"`
-	Token			string `json:"token"`
-
-
+	ID         int    `json:"user_id"`
+	First_Name string `json:"first_name"`
+	Last_Name  string `json:"last_name"`
+	Username   string `json:"username"`
+	Email      string `json:"email"`
+	Phone      int    `json:"phone_number"`
+	Password   string `json:"password,omitempty"`
+	Verified   bool   `json:"verified" gorm:"default:false"`
+	Profile    string `json:"profile"`
+	Token      string `json:"token"`
 }
 
 type AdminResponse struct {
-	ID       				int    `json:"id" `
-	Username 				string `json:"username"`
-	Password 				string `json:"password"`
-	Token					string `json:"token"`
+	ID       int    `json:"id" `
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Token    string `json:"token"`
+}
+
+type EventResponse struct {
+	Created_at               time.Time `json:"created_at"`
+	Organizer                string    `json:"user"` //forieng key reference to user
+	Title                    string    `json:"title"`
+	Date                     string    `json:"date"`
+	Location                 string    `json:"location"`
+	Offline                  bool      `json:"offline"`
+	Free                     bool      `json:"Free"`
+	Short_description        string    `json:"short_description"`
+	Long_description         string    `json:"long_description"`
+	Application_link         string    `json:"application_link"`
+	Website_link             string    `json:"website_link"`
+	Application_closing_date string    `json:"application_closing_date"`
+	Sub_events               string    `json:"sub_events"`
+	Archived                 bool      `json:"archived"`
 }
 
 // type BioResponse struct {
@@ -49,6 +68,3 @@ type AdminResponse struct {
 // 	Organized_events string `json:"organized_events"`
 // 	User             string `json:"user"` //forieng key reference to user
 // }
-
-
-

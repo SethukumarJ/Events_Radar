@@ -14,6 +14,7 @@ type UserRepository interface {
 	InsertUser(user model.User) (int, error)
 	StoreVerificationDetails(email string, code int) error
 	VerifyAccount(email string, code int) error
+	CreateEvent(event model.Event) (int, error)
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -54,7 +55,7 @@ func (c *userRepo) InsertUser(user model.User) (int, error) {
 		&id,
 	)
 
-	fmt.Println("id",id)
+	fmt.Println("id", id)
 	return id, err
 }
 
@@ -132,4 +133,48 @@ func (c *userRepo) VerifyAccount(email string, code int) error {
 	}
 
 	return nil
+}
+
+
+func (c *userRepo) CreateEvent(event model.Event) (int, error) {
+	var id int
+
+	query := `INSERT INTO events(
+		created_at,
+		organizer,
+		title,
+		event_date,
+		location,
+		offline,
+		Free,
+		short_description,
+		long_description,
+		application_link,
+		website_link,
+		application_closing_date,
+		sub_events,
+		event_pic
+		)VALUES
+			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+			RETURNING id;`
+
+	err := c.db.QueryRow(query,
+		event.Created_at,
+		event.Organizer,
+		event.Title,
+		event.Event_date,
+		event.Location,
+		event.Offline,
+		event.Free,
+		event.Short_description,
+		event.Long_description,
+		event.Application_link,
+		event.Website_link,
+		event.Application_closing_date,
+		event.Sub_events,
+		event.Event_pic).Scan(
+		&id,
+	)
+	return id, err
+
 }

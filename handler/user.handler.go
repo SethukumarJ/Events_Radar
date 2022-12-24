@@ -72,3 +72,5 @@ func (c *userHandler) VerifyAccount() http.HandlerFunc {
 		utils.ResponseJSON(w, response)
 	}
 }
+
+
