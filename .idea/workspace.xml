@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4561f85e-bfca-4649-8c06-f7763d5d7217" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Logging Details" beforeDir="false" afterPath="$PROJECT_DIR$/Logging Details" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/auth.handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/auth.handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user.handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user.handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/post.model.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/post.model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/response.model.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/response.model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/admin.repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/admin.repo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/user.repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/user.repo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/admin.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/admin.service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/auth.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/auth.service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/jwt.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/jwt.service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/user.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/user.service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,25 +52,6 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
-  <component name="RunManager">
-    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <module name="Events_Radar" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="FILE" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
-      <module name="Events_Radar" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="DIRECTORY" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <method v="2" />
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
