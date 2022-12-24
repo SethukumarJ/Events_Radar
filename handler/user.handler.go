@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"radar/common/response"
+	"radar/model"
 	"radar/service"
 	"radar/utils"
 	"strconv"
@@ -73,4 +75,23 @@ func (c *userHandler) VerifyAccount() http.HandlerFunc {
 	}
 }
 
+func (c *userHandler) AddEvent() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
+		var newEvent model.Event
+		json.NewDecoder(r.Body).Decode(&newEvent)
+		newEvent.Organizer_name = r.URL.Query().Get("Organizer_name")
+		_, err := c.userService.CreateEvent(newEvent)
+		if err != nil {
+			response := response.ErrorResponse("Failed to add new post", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+		response := response.SuccessResponse(true, "SUCCESS", newEvent)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+	}
+}
