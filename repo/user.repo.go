@@ -15,7 +15,7 @@ type UserRepository interface {
 	StoreVerificationDetails(email string, code int) error
 	VerifyAccount(email string, code int) error
 	CreateEvent(event model.Event) (string, error)
-	AllEvents() ([]model.EventResponse, error)
+	FilterEventsBy(cusat_only string,sex string, free string) ([]model.EventResponse, error)
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -183,10 +183,12 @@ func (c *userRepo) CreateEvent(event model.Event) (string, error) {
 
 }
 
-func (c *userRepo) AllEvents() ([]model.EventResponse, error){
+func (c *userRepo) FilterEventsBy(sex string, free string,cusat_only string) ([]model.EventResponse, error){
 
 
 	var events []model.EventResponse
+
+	
 
 	query := `SELECT 
 				COUNT(*) OVER(),
@@ -204,9 +206,11 @@ func (c *userRepo) AllEvents() ([]model.EventResponse, error){
 				application_closing_date,
 				sub_events,
 				free
-				FROM events WHERE cusat_only = $1;`
+				FROM events WHERE approved = true AND cusat_only = $1, sex = $2, free = $3;`
 
-				rows, err := c.db.Query(query, true)
+				
+
+				rows, err := c.db.Query(query, cusat_only, sex, free)
 
 				if err != nil {
 					return nil, err

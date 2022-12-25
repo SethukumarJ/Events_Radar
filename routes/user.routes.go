@@ -31,7 +31,7 @@ func (r *userRoute) UserRouter(routes chi.Router,
 	routes.Post("/user/send/verification", userHandler.SendVerificationMail())
 	routes.Patch("/user/verify/account", userHandler.VerifyAccount())
 	routes.Post("/user/CreateEvent", userHandler.CreateEvent())
-	routes.Get("/user/AllEvents", userHandler.AllEvents())
+	routes.Get("/user/AllEvents", userHandler.FilterEventsBy())
 
 	routes.Group(func(r chi.Router) {
 		r.Use(middleware.AuthorizeJwt)

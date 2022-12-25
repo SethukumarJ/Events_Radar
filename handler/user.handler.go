@@ -15,7 +15,7 @@ type UserHandler interface {
 	SendVerificationMail() http.HandlerFunc
 	VerifyAccount() http.HandlerFunc
 	CreateEvent() http.HandlerFunc
-	AllEvents() http.HandlerFunc
+	FilterEventsBy() http.HandlerFunc
 }
 
 type userHandler struct {
@@ -98,19 +98,19 @@ func (c *userHandler) CreateEvent() http.HandlerFunc {
 	}
 }
 
-
-
-func (c *userHandler) AllEvents() http.HandlerFunc {
+func (c *userHandler) FilterEventsBy() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		events,err := c.userService.AllEvents()
+		sex := r.URL.Query().Get("Sex")
+		free := (r.URL.Query().Get("Free"))
+		cusat_only := (r.URL.Query().Get("Cusat_only"))
+
+		events, err := c.userService.FilterEventsBy(cusat_only, sex, free)
 
 		result := struct {
 			Events *[]model.EventResponse
-			
 		}{
 			Events: events,
-			
 		}
 
 		if err != nil {
@@ -128,7 +128,3 @@ func (c *userHandler) AllEvents() http.HandlerFunc {
 
 	}
 }
-
-
-
-

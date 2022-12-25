@@ -58,7 +58,7 @@ type Event struct {
 	Event_date               string    `json:"event_date"`
 	Location                 string    `json:"location"`
 	Offline                  bool      `json:"offline"`
-	Free                     bool      `json:"Free"`
+	Free                     bool      `json:"free"`
 	Short_description        string    `json:"short_description"`
 	Long_description         string    `json:"long_description"`
 	Application_link         string    `json:"application_link"`

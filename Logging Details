@@ -242,3 +242,9 @@
 2022/12/25 19:06:39 /nConnected to database events_radar
 2022/12/25 19:06:39 Api is listening on port: 8080
 2022/12/25 19:08:25 [{0001-01-01 05:53:28 +0553 LMT  seth    false false       false} {0001-01-01 05:53:28 +0553 LMT  set    false false       false}]
+2022/12/25 20:07:06 /nConnected to database events_radar
+2022/12/25 20:07:06 Api is listening on port: 8080
+2022/12/25 20:08:00 Updating approval status to true  <nil>
+2022/12/25 20:08:21 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false}]
+2022/12/25 22:38:07 /nConnected to database events_radar
+2022/12/25 22:38:07 Api is listening on port: 8080

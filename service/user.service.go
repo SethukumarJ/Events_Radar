@@ -20,7 +20,7 @@ type UserService interface {
 	SendVerificationEmail(email string) error
 	VerifyAccount(email string, code int) error
 	CreateEvent(newEvent model.Event) (string, error)
-	AllEvents() (*[]model.EventResponse,error)
+	FilterEventsBy(cusat_only string,sex string, free string) (*[]model.EventResponse,error)
 }
 
 type userService struct {
@@ -136,9 +136,9 @@ func (c *userService) CreateEvent(newEvent model.Event) (string, error) {
 }
 
 
-func (c *userService) AllEvents() (*[]model.EventResponse,error) {
+func (c *userService) FilterEventsBy(cusat_only string,sex string, free string) (*[]model.EventResponse,error) {
 
-	events, err := c.userRepo.AllEvents()
+	events, err := c.userRepo.FilterEventsBy(cusat_only, sex, free)
 	// log.Println("metadata from service", metadata)
 	if err != nil {
 		return nil, err
