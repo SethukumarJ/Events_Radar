@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"radar/model"
 )
@@ -9,6 +10,7 @@ import (
 type AdminRepository interface {
 	CreateAdmin(admin model.Admin) error
 	FindAdmin(username string) (model.AdminResponse, error)
+	ApproveEvent(title string) error
 }
 
 type adminRepo struct {
@@ -52,4 +54,34 @@ func (c *adminRepo) FindAdmin(username string) (model.AdminResponse, error) {
 		&admin.Password)
 
 	return admin, err
+}
+
+func (c *adminRepo) ApproveEvent(title string) error {
+
+	var id int
+
+	query := `SELECT id FROM 
+				events WHERE 
+				title = $1;`
+	err := c.db.QueryRow(query, title).Scan(&id)
+
+	if err == sql.ErrNoRows {
+		return errors.New("invalid title")
+	}
+
+	if err != nil {
+		return err
+	}
+
+	query = `UPDATE events SET
+				approved = $1
+				WHERE
+				title = $2 ;`
+	err = c.db.QueryRow(query, true, title).Err()
+	log.Println("Updating approval status to true ", err)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

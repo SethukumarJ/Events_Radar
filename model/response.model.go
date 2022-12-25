@@ -30,9 +30,10 @@ type AdminResponse struct {
 
 type EventResponse struct {
 	Created_at               time.Time `json:"created_at"`
-	Organizer                string    `json:"user"` //forieng key reference to user
+	Organizer_name           string    `json:"organizer_name"` //forieng key reference to user
 	Title                    string    `json:"title"`
-	Date                     string    `json:"date"`
+	Event_pic                string    `json:"event_pic"`
+	Event_date               string    `json:"event_date"`
 	Location                 string    `json:"location"`
 	Offline                  bool      `json:"offline"`
 	Free                     bool      `json:"Free"`

@@ -50,66 +50,54 @@ type Verification struct {
 // 	User            string `json:"user"` //forieng key reference to user
 // }
 
-// type OrdinaryUser struct {
-// 	Id                  int    `json:"user_id"`
-// 	Proffession         string `json:"Proffesion"`
-// 	Participated_events string `json:"participated_events"`
-// 	User                string `json:"user"` //forieng key reference to user
-// }
-
-// type Organization struct {
-// 	Id               int    `json:"user_id"`
-// 	Location         string `json:"location"`
-// 	Organized_events string `json:"organized_events"`
-// 	User             string `json:"user"` //forieng key reference to user
-// }
-
 type Event struct {
-	
-	ID        				 int       `json:"id,omitempty"`
+	gorm.Model
 	Created_at               time.Time `json:"created_at"`
-	Organizer_name         	 string `json:"orginizer_name"` //forieng key reference to user
-	Title                    string `json:"title"`
-	Event_date               string `json:"event_date"`
-	Location                 string `json:"location"`
-	Offline                  bool   `json:"offline"`
-	Free                     bool   `json:"Free"`
-	Short_description        string `json:"short_description"`
-	Long_description         string `json:"long_description"`
-	Application_link         string `json:"application_link"`
-	Website_link             string `json:"website_link"`
-	Limit_applications_Id    string `json:"limit_applications"`
-	Application_closing_date string `json:"application_closing_date"`
-	Sub_events               string `json:"sub_events"`
-	Archived                 bool   `json:"archived"`
-	Event_pic                string `json:"event_pic"`
-	Question_id				 int    `json:"Question_id"`
-	Approved				 bool	`json:"approved" gorm:"default:false"`
+	Organizer_name           string    `json:"orginizer_name"` //forieng key reference to user
+	Title                    string    `json:"title" gorm:"not null;unique"`
+	Event_date               string    `json:"event_date"`
+	Location                 string    `json:"location"`
+	Offline                  bool      `json:"offline"`
+	Free                     bool      `json:"Free"`
+	Short_description        string    `json:"short_description"`
+	Long_description         string    `json:"long_description"`
+	Application_link         string    `json:"application_link"`
+	Website_link             string    `json:"website_link"`
+	Max_application          int       `json:"max_applications"`
+	Sex                      string    `json:"sex"`
+	Cusat_only               bool      `json:"cusat_only" gorm:"default:false"`
+	Application_closing_date string    `json:"application_closing_date"`
+	Sub_events               string    `json:"sub_events"`
+	Application_template     string    `json:"application_template"`
+	Archived                 bool      `json:"archived"`
+	Event_pic                string    `json:"event_pic"`
+	Question_id              int       `json:"Question_id"`
+	Approved                 bool      `json:"approved" gorm:"default:false"`
 }
-
-
-
-
-
-type LimitAppication struct {
-	Id					int    `json:"limitapplication_id"`
-	Max_application		int    `json:"max_applications"`
-	MaleOrFemale		string `json:"sex"`
-	CusatOnly			bool   `json:"cusatOnly" gorm:"default:false"`
+type ApplicationForm struct {
+	gorm.Model
+	Event_name     string `json:"event_name"`
+	Applicant_name string `json:"name"`
+	Organizer_name string `json:"Organizer_name"`
+	Proffession    string `json:"proffession"`
+	College        string `json:"college"`
+	Company        string `json:"company"`
+	About          string `json:"about"`
+	Email          string `json:"email"`
+	Github         string `json:"github"`
+	Linkedin       string `json:"linkedin"`
 }
 
 type Bookmarks struct {
 	gorm.Model
-	User_Id  	string `json:"user_id"`  //forieng key reference to user
-	Event_Id 	string `json:"event_id"` //forieng key reference to event
+	User_Id  string `json:"user_id"`  //forieng key reference to user
+	Event_Id string `json:"event_id"` //forieng key reference to event
 }
 
 type Applied_events struct {
-	Applied_at			time.Time `json:"applied_at"`
-	User_Id              string `json:"user_id"`  //forieng key reference to user
-	Event_Id             string `json:"event_id"` //forieng key reference to event
-	Application_status   string `json:"application_status"`
-	Participation_status bool   `json:"participation_status"`
-	Application_accepted bool 	`json:"application_accepted" gorm:"defautl:false"`
+	Applied_at           time.Time `json:"applied_at"`
+	User_Id              string    `json:"user_id"`  //forieng key reference to user
+	Event_Id             string    `json:"event_id"` //forieng key reference to event
+	Participation_status bool      `json:"participation_status"`
+	Application_accepted bool      `json:"application_accepted" gorm:"defautl:false"`
 }
-

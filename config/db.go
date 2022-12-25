@@ -20,6 +20,7 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Admin{})
 	db.AutoMigrate(&model.Verification{})
+	db.AutoMigrate(&model.Event{})
 
 	db.Exec(`INSERT INTO admins (
 				username,password)

@@ -14,7 +14,8 @@ type UserRepository interface {
 	InsertUser(user model.User) (int, error)
 	StoreVerificationDetails(email string, code int) error
 	VerifyAccount(email string, code int) error
-	CreateEvent(event model.Event) (int, error)
+	CreateEvent(event model.Event) (string, error)
+	AllEvents() ([]model.EventResponse, error)
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -135,18 +136,17 @@ func (c *userRepo) VerifyAccount(email string, code int) error {
 	return nil
 }
 
-
-func (c *userRepo) CreateEvent(event model.Event) (int, error) {
-	var id int
+func (c *userRepo) CreateEvent(event model.Event) (string, error) {
+	var title string
 
 	query := `INSERT INTO events(
 		created_at,
-		id,
 		organizer_name,
 		title,
 		event_date,
 		location,
 		offline,
+		cusat_only,
 		Free,
 		short_description,
 		long_description,
@@ -157,16 +157,16 @@ func (c *userRepo) CreateEvent(event model.Event) (int, error) {
 		event_pic
 		)VALUES
 			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-			RETURNING id;`
+			RETURNING title;`
 
 	err := c.db.QueryRow(query,
 		event.Created_at,
-		event.ID,
 		event.Organizer_name,
 		event.Title,
 		event.Event_date,
 		event.Location,
 		event.Offline,
+		event.Cusat_only,
 		event.Free,
 		event.Short_description,
 		event.Long_description,
@@ -175,8 +175,79 @@ func (c *userRepo) CreateEvent(event model.Event) (int, error) {
 		event.Application_closing_date,
 		event.Sub_events,
 		event.Event_pic).Scan(
-		&id,
+		&title,
 	)
-	return id, err
+
+	fmt.Println(title)
+	return title, err
 
 }
+
+func (c *userRepo) AllEvents() ([]model.EventResponse, error){
+
+
+	var events []model.EventResponse
+
+	query := `SELECT 
+				COUNT(*) OVER(),
+				created_at,
+				organizer_name,
+				title,
+				event_pic,
+				event_date,
+				location,
+				offline,
+				short_description,
+				long_description,
+				application_link,
+				website_link,
+				application_closing_date,
+				sub_events,
+				free
+				FROM events WHERE cusat_only = $1;`
+
+				rows, err := c.db.Query(query, true)
+
+				if err != nil {
+					return nil, err
+				} 
+
+				var totalRecords int
+
+				defer rows.Close()
+
+
+				for rows.Next() {
+					var Event model.EventResponse
+			
+					err = rows.Scan(
+						&totalRecords,
+						&Event.Created_at,
+						&Event.Organizer_name,
+						&Event.Title,
+						&Event.Event_pic,
+						&Event.Event_date,
+						&Event.Location,
+						&Event.Offline,
+						&Event.Short_description,
+						&Event.Long_description,
+						&Event.Application_link,
+						&Event.Website_link,
+						&Event.Application_closing_date,
+						&Event.Sub_events,
+						&Event.Free,
+
+						)
+			
+					if err != nil {
+						return events,  err
+					}
+					events = append(events, Event)
+				}
+
+			log.Println(events)
+
+			return events, nil
+
+
+	}

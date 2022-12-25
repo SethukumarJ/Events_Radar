@@ -30,6 +30,7 @@ func (r *adminRoute) AdminRouter(routes chi.Router,
 
 	routes.Post("/admin/signup", authHandler.AdminSignup())
 	routes.Post("/admin/login", authHandler.AdminLogin())
+	routes.Patch("/ApproveEvent",adminHandler.ApproveEvent())
 
 	routes.Group(func(r chi.Router) {
 		r.Use(middleware.AuthorizeJwt)

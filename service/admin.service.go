@@ -13,6 +13,7 @@ import (
 type AdminService interface {
 	CreateAdmin(admin model.Admin) error
 	FindAdmin(username string) (*model.AdminResponse, error)
+	ApproveEvent(title string) error
 }
 
 // adminService is the struct for admin service
@@ -68,3 +69,17 @@ func (c *adminService) CreateAdmin(admin model.Admin) error {
 	}
 	return nil
 }
+
+
+func (c *adminService) ApproveEvent(title string) error {
+
+	err := c.adminRepo.ApproveEvent(title)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+

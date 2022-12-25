@@ -14,6 +14,8 @@ import (
 type UserHandler interface {
 	SendVerificationMail() http.HandlerFunc
 	VerifyAccount() http.HandlerFunc
+	CreateEvent() http.HandlerFunc
+	AllEvents() http.HandlerFunc
 }
 
 type userHandler struct {
@@ -75,12 +77,12 @@ func (c *userHandler) VerifyAccount() http.HandlerFunc {
 	}
 }
 
-func (c *userHandler) AddEvent() http.HandlerFunc {
+func (c *userHandler) CreateEvent() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var newEvent model.Event
 		json.NewDecoder(r.Body).Decode(&newEvent)
-		newEvent.Organizer_name = r.URL.Query().Get("Organizer_name")
+		newEvent.Organizer_name = (r.Header.Get("Organizer_name"))
 		_, err := c.userService.CreateEvent(newEvent)
 		if err != nil {
 			response := response.ErrorResponse("Failed to add new post", err.Error(), nil)
@@ -95,3 +97,38 @@ func (c *userHandler) AddEvent() http.HandlerFunc {
 		utils.ResponseJSON(w, response)
 	}
 }
+
+
+
+func (c *userHandler) AllEvents() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		events,err := c.userService.AllEvents()
+
+		result := struct {
+			Events *[]model.EventResponse
+			
+		}{
+			Events: events,
+			
+		}
+
+		if err != nil {
+			response := response.ErrorResponse("error while getting posts from database", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "All Events", result)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+	}
+}
+
+
+
+

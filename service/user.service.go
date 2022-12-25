@@ -1,15 +1,17 @@
 package service
 
 import (
-	"crypto/md5"
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"radar/config"
 	"radar/model"
 	"radar/repo"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
@@ -17,9 +19,9 @@ type UserService interface {
 	FindUser(email string) (*model.UserResponse, error)
 	SendVerificationEmail(email string) error
 	VerifyAccount(email string, code int) error
-	CreateEvent(newEvent model.Event) (int, error)
+	CreateEvent(newEvent model.Event) (string, error)
+	AllEvents() (*[]model.EventResponse,error)
 }
-
 
 type userService struct {
 	userRepo   repo.UserRepository
@@ -43,8 +45,8 @@ func (c *userService) CreateUser(newUser model.User) error {
 
 	fmt.Println("create user from service")
 	_, err := c.userRepo.FindUser(newUser.Email)
-	fmt.Println("fund user",err )
-	
+	fmt.Println("fund user", err)
+
 	if err == nil {
 		return errors.New("Username already exists")
 	}
@@ -55,7 +57,7 @@ func (c *userService) CreateUser(newUser model.User) error {
 
 	//hashing password
 	newUser.Password = HashPassword(newUser.Password)
-	fmt.Println("password",newUser.Password)
+	fmt.Println("password", newUser.Password)
 	_, err = c.userRepo.InsertUser(newUser)
 	if err != nil {
 		return err
@@ -77,9 +79,12 @@ func (c *userService) FindUser(email string) (*model.UserResponse, error) {
 
 // HashPassword hashes the password
 func HashPassword(password string) string {
-	data := []byte(password)
-	password = fmt.Sprintf("%x", md5.Sum(data))
-	return password
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return string(hash)
 }
 
 // SendVerificationEmail sends the verification email
@@ -111,7 +116,6 @@ func (c *userService) SendVerificationEmail(email string) error {
 	return nil
 }
 
-
 // VerifyAccount verifies the account
 func (c *userService) VerifyAccount(email string, code int) error {
 
@@ -123,11 +127,22 @@ func (c *userService) VerifyAccount(email string, code int) error {
 	return nil
 }
 
-
-func (c *userService) CreateEvent(newEvent model.Event) (int, error) {
+func (c *userService) CreateEvent(newEvent model.Event) (string, error) {
 	_, err := c.userRepo.CreateEvent(newEvent)
 	if err != nil {
-		return newEvent.ID, err
+		return newEvent.Title, err
 	}
-	return newEvent.ID, nil
+	return newEvent.Title, nil
+}
+
+
+func (c *userService) AllEvents() (*[]model.EventResponse,error) {
+
+	events, err := c.userRepo.AllEvents()
+	// log.Println("metadata from service", metadata)
+	if err != nil {
+		return nil, err
+	}
+
+	return &events, nil
 }
