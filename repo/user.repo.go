@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"radar/model"
+	"reflect"
+	// "github.com/pelletier/go-toml/query"
 )
 
 // UserRepository represent the users's repository contract
@@ -15,7 +17,9 @@ type UserRepository interface {
 	StoreVerificationDetails(email string, code int) error
 	VerifyAccount(email string, code int) error
 	CreateEvent(event model.Event) (string, error)
-	FilterEventsBy(cusat_only string,sex string, free string) ([]model.EventResponse, error)
+	FilterEventsBy(sex string, cusat_only string, free string) ([]model.EventResponse, error)
+	AllEvents() ([]model.EventResponse, error)
+	AskQuestion(question model.FAQA) error
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -183,12 +187,16 @@ func (c *userRepo) CreateEvent(event model.Event) (string, error) {
 
 }
 
-func (c *userRepo) FilterEventsBy(sex string, free string,cusat_only string) ([]model.EventResponse, error){
-
+func (c *userRepo) FilterEventsBy(sex string, cusat_only string, free string) ([]model.EventResponse, error) {
 
 	var events []model.EventResponse
 
-	
+	fmt.Println(free, "from repo")
+	fmt.Println(sex, "sexfrom repo")
+	fmt.Println("cusat only from repo:", cusat_only)
+
+	fmt.Println(reflect.TypeOf(sex))
+	fmt.Println(reflect.TypeOf(free))
 
 	query := `SELECT 
 				COUNT(*) OVER(),
@@ -206,52 +214,146 @@ func (c *userRepo) FilterEventsBy(sex string, free string,cusat_only string) ([]
 				application_closing_date,
 				sub_events,
 				free
-				FROM events WHERE approved = true AND cusat_only = $1, sex = $2, free = $3;`
+				FROM events WHERE approved = true AND cusat_only = $1 AND sex = $2;`
 
-				
+	rows, err := c.db.Query(query, cusat_only,sex)
 
-				rows, err := c.db.Query(query, cusat_only, sex, free)
-
-				if err != nil {
-					return nil, err
-				} 
-
-				var totalRecords int
-
-				defer rows.Close()
-
-
-				for rows.Next() {
-					var Event model.EventResponse
-			
-					err = rows.Scan(
-						&totalRecords,
-						&Event.Created_at,
-						&Event.Organizer_name,
-						&Event.Title,
-						&Event.Event_pic,
-						&Event.Event_date,
-						&Event.Location,
-						&Event.Offline,
-						&Event.Short_description,
-						&Event.Long_description,
-						&Event.Application_link,
-						&Event.Website_link,
-						&Event.Application_closing_date,
-						&Event.Sub_events,
-						&Event.Free,
-
-						)
-			
-					if err != nil {
-						return events,  err
-					}
-					events = append(events, Event)
-				}
-
-			log.Println(events)
-
-			return events, nil
-
-
+	if err != nil {
+		return nil, err
 	}
+
+	var totalRecords int
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var Event model.EventResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&Event.Created_at,
+			&Event.Organizer_name,
+			&Event.Title,
+			&Event.Event_pic,
+			&Event.Event_date,
+			&Event.Location,
+			&Event.Offline,
+			&Event.Short_description,
+			&Event.Long_description,
+			&Event.Application_link,
+			&Event.Website_link,
+			&Event.Application_closing_date,
+			&Event.Sub_events,
+			&Event.Free,
+		)
+
+		if err != nil {
+			return events, err
+		}
+		events = append(events, Event)
+	}
+
+	log.Println(events)
+
+	return events, nil
+
+}
+
+func (c *userRepo) AllEvents() ([]model.EventResponse, error) {
+
+	var events []model.EventResponse
+
+	query := `SELECT 
+				COUNT(*) OVER(),
+				created_at,
+				organizer_name,
+				title,
+				event_pic,
+				event_date,
+				location,
+				offline,
+				short_description,
+				long_description,
+				application_link,
+				website_link,
+				application_closing_date,
+				sub_events,
+				free
+				FROM events WHERE approved = true;`
+
+	rows, err := c.db.Query(query)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var totalRecords int
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var Event model.EventResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&Event.Created_at,
+			&Event.Organizer_name,
+			&Event.Title,
+			&Event.Event_pic,
+			&Event.Event_date,
+			&Event.Location,
+			&Event.Offline,
+			&Event.Short_description,
+			&Event.Long_description,
+			&Event.Application_link,
+			&Event.Website_link,
+			&Event.Application_closing_date,
+			&Event.Sub_events,
+			&Event.Free,
+		)
+
+		if err != nil {
+			return events, err
+		}
+		events = append(events, Event)
+	}
+
+	log.Println(events)
+
+	return events, nil
+
+}
+
+func (c *userRepo) AskQuestion(question model.FAQA) error {
+
+	query := `INSERT INTO faqas(
+				created_at,
+				question,
+				event_name,
+				user_name)
+				VALUES 
+				($1, $2, $3, $4);`
+
+	err := c.db.QueryRow(query,
+		question.CreatedAt,
+		question.Question,
+		question.Event_name,
+		question.User_name)
+	log.Println("error : ", err)
+	if err == nil {
+		return errors.New("Failed to post queston!")
+	}
+	return nil
+}
+
+// func (c *userRepo) GetFaqa() ([]model.FAQAResponse, error) {
+
+// 	var faqas []model.FAQAResponse
+
+// 	query := `SELECT
+// 	COUNT(*) OVER(),
+// 	created_at,
+// 	question,
+// 	answer
+// 	FROM faqas where public = true and event_name = $1, `
+// }
