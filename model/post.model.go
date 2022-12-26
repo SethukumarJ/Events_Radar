@@ -101,3 +101,13 @@ type Applied_events struct {
 	Participation_status bool      `json:"participation_status"`
 	Application_accepted bool      `json:"application_accepted" gorm:"defautl:false"`
 }
+
+type FAQA struct {
+	gorm.Model
+	Event_name string `json:"event_name"`
+	Question   string `json:"question"`
+	User_name  string `json:"user_name"`
+	Answer     string `json:"answer"`
+	Public     bool	  `json:"public" gorm:"default:false"`
+	Date       string `json:"date"`
+}
