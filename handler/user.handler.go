@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"radar/common/response"
 	"radar/model"
@@ -16,6 +17,8 @@ type UserHandler interface {
 	VerifyAccount() http.HandlerFunc
 	CreateEvent() http.HandlerFunc
 	FilterEventsBy() http.HandlerFunc
+	AllEvents()  http.HandlerFunc
+	AskQuestion() http.HandlerFunc
 }
 
 type userHandler struct {
@@ -101,11 +104,13 @@ func (c *userHandler) CreateEvent() http.HandlerFunc {
 func (c *userHandler) FilterEventsBy() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
+		free := r.URL.Query().Get("Free")
 		sex := r.URL.Query().Get("Sex")
-		free := (r.URL.Query().Get("Free"))
+		fmt.Println("free from handlers:",free)
 		cusat_only := (r.URL.Query().Get("Cusat_only"))
+		fmt.Println("cusat only from handler:",cusat_only)
 
-		events, err := c.userService.FilterEventsBy(cusat_only, sex, free)
+		events, err := c.userService.FilterEventsBy( sex,cusat_only, free)
 
 		result := struct {
 			Events *[]model.EventResponse
@@ -126,5 +131,61 @@ func (c *userHandler) FilterEventsBy() http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		utils.ResponseJSON(w, response)
 
+	}
+}
+
+
+func (c *userHandler) AllEvents() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		events, err := c.userService.AllEvents()
+
+		result := struct {
+			Events *[]model.EventResponse
+		}{
+			Events: events,
+		}
+
+		if err != nil {
+			response := response.ErrorResponse("error while getting posts from database", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "All Events", result)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+	}
+}
+
+
+func (c *userHandler) AskQuestion() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var newQuestion model.FAQA
+		json.NewDecoder(r.Body).Decode(&newQuestion)
+
+		if newQuestion.Question == "" {
+
+				log.Fatal("Qustion box is empty!")
+				return
+		}
+		newQuestion.User_name = r.Header.Get("User_name")
+		newQuestion.Event_name = r.Header.Get("Event_name")
+		err := c.userService.AskQuestion(newQuestion)
+		if err != nil {
+			response := response.ErrorResponse("Failed to add new comment", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+		response := response.SuccessResponse(true, "SUCCESS", newQuestion)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
 	}
 }
