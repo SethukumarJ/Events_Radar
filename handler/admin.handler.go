@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"radar/common/response"
@@ -58,12 +59,19 @@ func (c *adminHandler) ViewAllUsers() http.HandlerFunc {
 
 		log.Println(page, "   ", pageSize)
 
+		fmt.Println("page :", page)
+		fmt.Println("pagesize", pageSize)
+
 		pagenation := utils.Filter{
 			Page:     page,
 			PageSize: pageSize,
 		}
 
+		fmt.Println("pagenation",pagenation)
+
 		users, metadata, err := c.adminService.AllUsers(pagenation)
+
+		fmt.Println("users:",users)
 
 		result := struct {
 			Users *[]model.UserResponse

@@ -19,6 +19,7 @@ type UserHandler interface {
 	FilterEventsBy() http.HandlerFunc
 	AllEvents()  http.HandlerFunc
 	AskQuestion() http.HandlerFunc
+	GetFaqa() http.HandlerFunc
 }
 
 type userHandler struct {
@@ -173,7 +174,7 @@ func (c *userHandler) AskQuestion() http.HandlerFunc {
 				log.Fatal("Qustion box is empty!")
 				return
 		}
-		newQuestion.User_name = r.Header.Get("User_name")
+		newQuestion.Username = r.Header.Get("User_name")
 		newQuestion.Event_name = r.Header.Get("Event_name")
 		err := c.userService.AskQuestion(newQuestion)
 		if err != nil {
@@ -187,5 +188,37 @@ func (c *userHandler) AskQuestion() http.HandlerFunc {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		utils.ResponseJSON(w, response)
+	}
+} 
+
+
+func (c *userHandler) GetFaqa() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+
+		event_name := r.URL.Query().Get("Event_name")
+
+		faqas, err := c.userService.GetFaqa(event_name)
+
+		result := struct {
+			Faqas *[]model.FAQAResponse
+		}{
+			Faqas: faqas,
+		}
+
+		if err != nil {
+			response := response.ErrorResponse("error while getting posts from database", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "All Events", result)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+		
 	}
 }

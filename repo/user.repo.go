@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 	"radar/model"
-	"reflect"
 	"radar/utils"
+	"reflect"
 	// "github.com/pelletier/go-toml/query"
 )
 
@@ -22,6 +22,7 @@ type UserRepository interface {
 	FilterEventsBy(sex string, cusat_only string, free string) ([]model.EventResponse, error)
 	AllEvents() ([]model.EventResponse, error)
 	AskQuestion(question model.FAQA) error
+	GetFaqa(event_name string) ([]model.FAQAResponse, error)
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -160,9 +161,10 @@ func (c *userRepo) CreateEvent(event model.Event) (string, error) {
 		website_link,
 		application_closing_date,
 		sub_events,
-		event_pic
+		event_pic,
+		sex
 		)VALUES
-			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
 			RETURNING title;`
 
 	err := c.db.QueryRow(query,
@@ -180,7 +182,8 @@ func (c *userRepo) CreateEvent(event model.Event) (string, error) {
 		event.Website_link,
 		event.Application_closing_date,
 		event.Sub_events,
-		event.Event_pic).Scan(
+		event.Event_pic,
+		event.Sex).Scan(
 		&title,
 	)
 
@@ -216,9 +219,9 @@ func (c *userRepo) FilterEventsBy(sex string, cusat_only string, free string) ([
 				application_closing_date,
 				sub_events,
 				free
-				FROM events WHERE approved = true AND cusat_only = $1 AND sex = $2;`
+				FROM events WHERE approved = true AND cusat_only = $1 AND sex = $2 AND free = $3;`
 
-	rows, err := c.db.Query(query, cusat_only, sex)
+	rows, err := c.db.Query(query, cusat_only, sex, free)
 
 	if err != nil {
 		return nil, err
@@ -340,7 +343,7 @@ func (c *userRepo) AskQuestion(question model.FAQA) error {
 		question.CreatedAt,
 		question.Question,
 		question.Event_name,
-		question.User_name)
+		question.Username)
 	log.Println("error : ", err)
 	if err == nil {
 		return errors.New("Failed to post queston!")
@@ -348,29 +351,109 @@ func (c *userRepo) AskQuestion(question model.FAQA) error {
 	return nil
 }
 
-// func (c *userRepo) GetFaqa() ([]model.FAQAResponse, error) {
+func (c *userRepo) GetFaqa(event_name string) ([]model.FAQAResponse, error) {
 
-// 	var faqas []model.FAQAResponse
+	var faqas []model.FAQAResponse
 
-// 	query := `SELECT
-// 	COUNT(*) OVER(),
-// 	created_at,
-// 	question,
-// 	answer
-// 	FROM faqas where public = true and event_name = $1, `
-// }
+	query := `SELECT
+	COUNT(*) OVER(),
+	created_at
+	username,
+	question,
+	answer
+	FROM faqas where public = true and event_name = $1, `
+	
+
+	rows, err := c.db.Query(query)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var totalRecords int
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var Faqas model.FAQAResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&Faqas.CreatedAt,
+			&Faqas.Username,
+			&Faqas.Question,
+			&Faqas.Answer,
+		)
+
+		if err != nil {
+			return faqas, err
+		}
+		 faqas = append(faqas, Faqas)
+	}
+
+	log.Println(faqas)
+
+	return  faqas, nil
+
+	}
 
 
+	func (c *userRepo) GetQuestions(username string, event_name string) ([]model.FAQAResponse, error) {
+
+		var faqas []model.FAQAResponse
+	
+		query := `SELECT
+		COUNT(*) OVER(),
+		event_name ,
+		created_at
+		username,
+		question
+		FROM faqas where public = false AND event_name = $1;`
+		
+	
+		rows, err := c.db.Query(query)
+	
+		if err != nil {
+			return nil, err
+		}
+	
+		var totalRecords int
+	
+		defer rows.Close()
+	
+		for rows.Next() {
+			var Faqas model.FAQAResponse
+	
+			err = rows.Scan(
+				&totalRecords,
+				&Faqas.Event_name,
+				&Faqas.CreatedAt,
+				&Faqas.Username,
+				&Faqas.Question,
+			)
+	
+			if err != nil {
+				return faqas, err
+			}
+			 faqas = append(faqas, Faqas)
+		}
+	
+		log.Println(faqas)
+	
+		return  faqas, nil
+	
+		}
+	
 
 
-func(c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils.Metadata, error) {
+func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils.Metadata, error) {
 
-
+	fmt.Println("allusers called from repo")
 	var users []model.UserResponse
 
 	query := `SELECT 
 				COUNT(*) OVER(),
-				id,
+				
 				first_name,
 				last_name,
 				email,
@@ -381,32 +464,38 @@ func(c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils
 				LIMIT $1 OFFSET $2`
 
 	rows, err := c.db.Query(query, pagenation.Limit(), pagenation.Offset())
+	fmt.Println("rows", rows)
 	if err != nil {
 		return nil, utils.Metadata{}, err
 	}
 
+	fmt.Println("allusers called from repo")
+
 	var totalRecords int
 
 	defer rows.Close()
+	fmt.Println("allusers called from repo")
 
 	for rows.Next() {
-		var user model.UserResponse
-
+		var User model.UserResponse
+		fmt.Println("username :", User.Username)
 		err = rows.Scan(
 			&totalRecords,
-			&user.Username,
-			&user.First_Name,
-			&user.Last_Name,
-			&user.Email,
-			&user.Password,
-			&user.Phone,
-			&user.Profile,
+
+			&User.First_Name,
+			&User.Last_Name,
+			&User.Email,
+			&User.Password,
+			&User.Phone,
+			&User.Profile,
 		)
+
+		fmt.Println("username", User.Username)
 
 		if err != nil {
 			return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), err
 		}
-		users = append(users, user)
+		users = append(users, User)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -415,6 +504,5 @@ func(c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils
 	log.Println(users)
 	log.Println(utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize))
 	return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), nil
-
 
 }

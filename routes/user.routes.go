@@ -34,6 +34,8 @@ func (r *userRoute) UserRouter(routes chi.Router,
 	routes.Get("/user/AllEvents", userHandler.AllEvents())
 	routes.Get("/user/FilterEventsBy",userHandler.FilterEventsBy())
 	routes.Post("/user/AskQuestion",userHandler.AskQuestion())
+	routes.Get("/user/GetFaqa", userHandler.GetFaqa())
+	// routes.Post("/auth/google", authHandler.GoogleSignin())
 	
 
 	routes.Group(func(r chi.Router) {

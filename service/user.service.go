@@ -23,6 +23,7 @@ type UserService interface {
 	FilterEventsBy(sex string,cusat_only string, free string) (*[]model.EventResponse,error)
 	AllEvents() (*[]model.EventResponse, error)
 	AskQuestion(newQuestion model.FAQA) error
+	GetFaqa(event_name string) (*[]model.FAQAResponse, error)
 }
 
 type userService struct {
@@ -168,6 +169,17 @@ func (c *userService) AskQuestion(newQuestion model.FAQA) error {
 		return err
 	}
 	return nil
+}
+
+// FindUser finds the user
+func (c *userService) GetFaqa(event_name string) (*[]model.FAQAResponse, error) {
+	faqa, err := c.userRepo.GetFaqa(event_name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &faqa, nil
 }
 
 

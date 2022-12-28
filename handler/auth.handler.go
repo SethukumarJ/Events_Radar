@@ -5,11 +5,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"radar/common/response"
 	"radar/model"
 	"radar/service"
 	"radar/utils"
 	"strings"
+	"text/template"
+
+	"github.com/gorilla/pat"
+	"github.com/gorilla/sessions"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/gothic"
+	"github.com/markbates/goth/providers/google"
+	"github.com/subosito/gotenv"
 )
 
 // AuthHandler interface
@@ -20,7 +29,7 @@ type AuthHandler interface {
 	UserLogin() http.HandlerFunc
 	AdminRefreshToken() http.HandlerFunc
 	UserRefreshToken() http.HandlerFunc
-	// GoogleSignin()
+	GoogleSignin()
 }
 
 type authHandler struct {
@@ -224,72 +233,72 @@ func (c *authHandler) UserRefreshToken() http.HandlerFunc {
 	}
 }
 
-// func init() {
-// 	err := gotenv.Load()
+func init() {
+	err := gotenv.Load()
 
-// 	if err != nil {
-// 		log.Fatal("error loafding env")
-// 	}
+	if err != nil {
+		log.Fatal("error loafding env")
+	}
 
-// }
+}
 
-// func GoogleSignin() {
+func (u *authHandler) GoogleSignin() {
 
-// 	CLIENT_ID := os.Getenv("CLIENT_ID")         //get client id from env
-// 	CLIENT_SECRET := os.Getenv("CLIENT_SECRET") //get client secret key from env
-// 	SECRET_KEY := os.Getenv("SECRET_KEY")       // get secret key for session handling
-// 	REDIRECT_URL := os.Getenv("REDIRECT_URL")   //redirect url
+	CLIENT_ID := os.Getenv("CLIENT_ID")         //get client id from env
+	CLIENT_SECRET := os.Getenv("CLIENT_SECRET") //get client secret key from env
+	SECRET_KEY := os.Getenv("SECRET_KEY")       // get secret key for session handling
+	REDIRECT_URL := os.Getenv("REDIRECT_URL")   //redirect url
 
-// 	fmt.Println(CLIENT_ID)
-// 	fmt.Println(CLIENT_SECRET)
-// 	fmt.Println(SECRET_KEY)
-// 	fmt.Println(REDIRECT_URL)
+	fmt.Println(CLIENT_ID)
+	fmt.Println(CLIENT_SECRET)
+	fmt.Println(SECRET_KEY)
+	fmt.Println(REDIRECT_URL)
 
-// 	key := SECRET_KEY // Replace with your SESSION_SECRET or similar
-// 	maxAge := 8 * 30  // 30 days
-// 	isProd := false   // Set to true when serving over https
+	key := SECRET_KEY // Replace with your SESSION_SECRET or similar
+	maxAge := 8 * 30  // 30 days
+	isProd := false   // Set to true when serving over https
 
-// 	store := sessions.NewCookieStore([]byte(key))
-// 	store.MaxAge(maxAge)
-// 	store.Options.Path = "/"
-// 	store.Options.HttpOnly = true // HttpOnly should always be enabled
-// 	store.Options.Secure = isProd
+	store := sessions.NewCookieStore([]byte(key))
+	store.MaxAge(maxAge)
+	store.Options.Path = "/"
+	store.Options.HttpOnly = true // HttpOnly should always be enabled
+	store.Options.Secure = isProd
 
-// 	gothic.Store = store
+	gothic.Store = store
 
-// 	goth.UseProviders(
-// 		google.New(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, "email", "profile"),
-// 	)
+	goth.UseProviders(
+		google.New(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, "email", "profile"),
+	)
 
-// 	p := pat.New()
-// 	p.Get("/auth/{provider}/callback", GetUser)
+	p := pat.New()
+	p.Get("/auth/{provider}/callback", GetUser)
 
-// 	p.Get("/auth/{provider}", AuthBigginer)
+	p.Get("/auth/{provider}", AuthBigginer)
 
-// 	p.Get("/", func(res http.ResponseWriter, req *http.Request) {
-// 		t, _ := template.ParseFiles("Templates/index.html")
-// 		t.Execute(res, false)
-// 	})
-// 	log.Println("listening on localhost:3000")
-// 	log.Fatal(http.ListenAndServe(":3000", p))
-// }
+	p.Get("/", func(res http.ResponseWriter, req *http.Request) {
+		t, _ := template.ParseFiles("Templates/index.html")
+		t.Execute(res, false)
+	})
+	log.Println("listening on localhost:3000")
+	log.Fatal(http.ListenAndServe(":3000", p))
+}
 
-// func GetUser(res http.ResponseWriter, req *http.Request) {
+func GetUser(res http.ResponseWriter, req *http.Request) {
 
-// 	user, err := gothic.CompleteUserAuth(res, req)
-// 	if err != nil {
-// 		fmt.Fprintln(res, err)
-// 		return
-// 	}
+	user, err := gothic.CompleteUserAuth(res, req)
+	if err != nil {
+		fmt.Fprintln(res, err)
+		return
+	}
 
-// 	fmt.Println(user.Name, user.Email, user.FirstName, user.LastName)
+	fmt.Println(user.Name, user.Email, user.FirstName, user.LastName)
 
-// 	fmt.Println(user)
-// 	// t, _ := template.ParseFiles("Templates/success.html")
-// 	// t.Execute(res, user)
-// }
+	fmt.Println(user)
+	// t, _ := template.ParseFiles("Templates/success.html")
+	// t.Execute(res, user)
+}
 
-// func AuthBigginer(res http.ResponseWriter, req *http.Request) {
+func AuthBigginer(res http.ResponseWriter, req *http.Request) {
 
-// 	gothic.BeginAuthHandler(res, req)
-// }
+	gothic.BeginAuthHandler(res, req)
+}

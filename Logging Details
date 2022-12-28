@@ -424,3 +424,141 @@
 2022/12/26 20:45:00 Api is listening on port: 8080
 2022/12/26 20:45:05 []
 2022/12/26 22:12:36 []
+2022/12/28 13:42:30 /nConnected to database events_radar
+2022/12/28 13:42:30 Api is listening on port: 8080
+2022/12/28 17:35:08 /nConnected to database events_radar
+2022/12/28 17:35:08 Api is listening on port: 8080
+2022/12/28 18:14:10 /nConnected to database events_radar
+2022/12/28 18:14:10 Api is listening on port: 8080
+2022/12/28 18:14:21 []
+2022/12/28 18:15:32 /nConnected to database events_radar
+2022/12/28 18:15:32 Api is listening on port: 8080
+2022/12/28 18:15:35 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false}]
+2022/12/28 18:23:40 3     10
+2022/12/28 18:23:40 []
+2022/12/28 18:23:40 {0 0 0 0 0}
+2022/12/28 18:24:01 3     100
+2022/12/28 18:24:01 []
+2022/12/28 18:24:01 {0 0 0 0 0}
+2022/12/28 18:26:29 /nConnected to database events_radar
+2022/12/28 18:26:29 Api is listening on port: 8080
+2022/12/28 18:26:32 3     100
+2022/12/28 18:26:32 []
+2022/12/28 18:26:32 {0 0 0 0 0}
+2022/12/28 18:26:39 36     100
+2022/12/28 18:26:39 []
+2022/12/28 18:26:39 {0 0 0 0 0}
+2022/12/28 18:27:04 /nConnected to database events_radar
+2022/12/28 18:27:04 Api is listening on port: 8080
+2022/12/28 18:27:06 36     100
+2022/12/28 18:27:06 []
+2022/12/28 18:27:06 {0 0 0 0 0}
+2022/12/28 18:28:28 /nConnected to database events_radar
+2022/12/28 18:28:28 Api is listening on port: 8080
+2022/12/28 18:28:31 36     100
+2022/12/28 18:28:31 []
+2022/12/28 18:28:31 {0 0 0 0 0}
+2022/12/28 18:28:52 /nConnected to database events_radar
+2022/12/28 18:28:52 Api is listening on port: 8080
+2022/12/28 18:28:56 36     100
+2022/12/28 18:28:56 []
+2022/12/28 18:28:56 {0 0 0 0 0}
+2022/12/28 18:29:19 /nConnected to database events_radar
+2022/12/28 18:29:19 Api is listening on port: 8080
+2022/12/28 18:29:21 36     100
+2022/12/28 18:29:21 []
+2022/12/28 18:29:21 {0 0 0 0 0}
+2022/12/28 18:32:07 /nConnected to database events_radar
+2022/12/28 18:32:07 Api is listening on port: 8080
+2022/12/28 18:32:10 36     100
+2022/12/28 18:32:10 []
+2022/12/28 18:32:10 {0 0 0 0 0}
+2022/12/28 18:41:12 /nConnected to database events_radar
+2022/12/28 18:41:12 Api is listening on port: 8080
+2022/12/28 18:41:15 36     100
+2022/12/28 18:41:15 []
+2022/12/28 18:41:15 {0 0 0 0 0}
+2022/12/28 18:48:51 /nConnected to database events_radar
+2022/12/28 18:48:51 Api is listening on port: 8080
+2022/12/28 18:48:54 36     100
+2022/12/28 18:48:54 []
+2022/12/28 18:48:54 {0 0 0 0 0}
+2022/12/28 18:51:10 /nConnected to database events_radar
+2022/12/28 18:51:10 Api is listening on port: 8080
+2022/12/28 18:51:13 36     100
+2022/12/28 18:51:13 []
+2022/12/28 18:51:13 {0 0 0 0 0}
+2022/12/28 18:52:42 /nConnected to database events_radar
+2022/12/28 18:52:42 Api is listening on port: 8080
+2022/12/28 18:52:45 36     100
+2022/12/28 18:52:45 []
+2022/12/28 18:52:45 {0 0 0 0 0}
+2022/12/28 18:56:21 /nConnected to database events_radar
+2022/12/28 18:56:21 Api is listening on port: 8080
+2022/12/28 18:56:37 /nConnected to database events_radar
+2022/12/28 18:56:37 Api is listening on port: 8080
+2022/12/28 18:56:40 36     100
+2022/12/28 18:56:40 []
+2022/12/28 18:56:40 {0 0 0 0 0}
+2022/12/28 18:57:23 /nConnected to database events_radar
+2022/12/28 18:57:23 Api is listening on port: 8080
+2022/12/28 18:57:26 36     100
+2022/12/28 18:57:26 []
+2022/12/28 18:57:26 {0 0 0 0 0}
+2022/12/28 19:01:27 1     5
+2022/12/28 19:01:42 2     5
+2022/12/28 19:01:42 []
+2022/12/28 19:01:42 {0 0 0 0 0}
+2022/12/28 19:01:48 0     5
+2022/12/28 19:02:00 1     5
+2022/12/28 19:03:59 /nConnected to database events_radar
+2022/12/28 19:03:59 Api is listening on port: 8080
+2022/12/28 19:04:03 1     5
+2022/12/28 19:04:03 [{{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0    sethukumarj.76@gmail.com 0 827ccb0eea8a706c4c34a16891f84e7b false  } {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0    sethukumarj.76@gmail.co 0 827ccb0eea8a706c4c34a16891f84e7b false  } {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0    sethukumarj.76@gmail.c 0 827ccb0eea8a706c4c34a16891f84e7b false  } {{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0    sethukumarj.76@gmail. 0 827ccb0eea8a706c4c34a16891f84e7b false  }]
+2022/12/28 19:04:03 {1 5 1 1 4}
+2022/12/28 20:36:49 /nConnected to database events_radar
+2022/12/28 20:36:49 Api is listening on port: 8080
+2022/12/28 20:37:02 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false}]
+2022/12/28 20:37:43 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false}]
+2022/12/28 20:37:56 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false}]
+2022/12/28 20:38:32 Updating approval status to true  <nil>
+2022/12/28 20:38:40 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false} {0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false}]
+2022/12/28 20:38:48 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false} {0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false}]
+2022/12/28 20:39:21 /nConnected to database events_radar
+2022/12/28 20:39:21 Api is listening on port: 8080
+2022/12/28 20:39:24 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false}]
+2022/12/28 20:54:50 Updating approval status to true  <nil>
+2022/12/28 20:55:00 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:12 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:22 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:34 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:35 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:36 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:37 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:55:46 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:56:00 []
+2022/12/28 20:56:10 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:56:43 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:57:03 [{0001-01-01 05:53:28 +0553 LMT  sethuk    false false       false} {0001-01-01 05:53:28 +0553 LMT  sethukumarj.com    false true       false} {0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 20:58:44 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 21:00:29 /nConnected to database events_radar
+2022/12/28 21:00:29 Api is listening on port: 8080
+2022/12/28 21:00:32 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 21:01:29 /nConnected to database events_radar
+2022/12/28 21:01:29 Api is listening on port: 8080
+2022/12/28 21:01:33 []
+2022/12/28 21:01:46 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 21:02:00 []
+2022/12/28 21:02:03 []
+2022/12/28 21:02:10 []
+2022/12/28 21:02:17 []
+2022/12/28 21:02:29 []
+2022/12/28 21:02:39 []
+2022/12/28 21:02:44 []
+2022/12/28 21:02:50 []
+2022/12/28 21:03:00 []
+2022/12/28 21:03:10 [{0001-01-01 05:53:28 +0553 LMT  anandhukumarj    false true       false} {0001-01-01 05:53:28 +0553 LMT  anadhukumar    false true       false}]
+2022/12/28 21:26:12 /nConnected to database events_radar
+2022/12/28 21:26:12 Api is listening on port: 8080
+2022/12/28 21:28:15 /nConnected to database events_radar
+2022/12/28 21:28:15 Api is listening on port: 8080

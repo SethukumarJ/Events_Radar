@@ -46,14 +46,13 @@ type EventResponse struct {
 	Archived                 bool      `json:"archived"`
 }
 
-
 type FAQAResponse struct {
 	gorm.Model
 	Event_name string `json:"event_name"`
 	Question   string `json:"question"`
-	User_name  string `json:"user_name"`
+	Username   string `json:"username"`
 	Answer     string `json:"answer"`
-	Public     bool	  `json:"public" gorm:"default:false"`
+	Public     bool   `json:"public"`
 	Date       string `json:"date"`
 }
 
