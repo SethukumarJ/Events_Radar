@@ -6,13 +6,14 @@ import (
 	"log"
 	"radar/model"
 	"radar/repo"
+	"radar/utils"
 )
-
 
 // AdminService is the interface for admin service
 type AdminService interface {
 	CreateAdmin(admin model.Admin) error
 	FindAdmin(username string) (*model.AdminResponse, error)
+	AllUsers(pagenation utils.Filter) (*[]model.UserResponse, *utils.Metadata, error)
 	ApproveEvent(title string) error
 }
 
@@ -45,7 +46,6 @@ func (c *adminService) FindAdmin(username string) (*model.AdminResponse, error) 
 	return &admin, nil
 }
 
-
 // CreateAdmin creates the admin
 func (c *adminService) CreateAdmin(admin model.Admin) error {
 
@@ -70,7 +70,6 @@ func (c *adminService) CreateAdmin(admin model.Admin) error {
 	return nil
 }
 
-
 func (c *adminService) ApproveEvent(title string) error {
 
 	err := c.adminRepo.ApproveEvent(title)
@@ -82,4 +81,12 @@ func (c *adminService) ApproveEvent(title string) error {
 }
 
 
+func (c *adminService) AllUsers(pagenation utils.Filter) (*[]model.UserResponse, *utils.Metadata, error) {
 
+	users, metadata, err := c.userRepo.AllUsers(pagenation)
+	if err != nil {
+		return nil, &metadata, err
+	}
+
+	return &users, &metadata, nil
+}

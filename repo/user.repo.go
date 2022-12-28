@@ -7,12 +7,14 @@ import (
 	"log"
 	"radar/model"
 	"reflect"
+	"radar/utils"
 	// "github.com/pelletier/go-toml/query"
 )
 
 // UserRepository represent the users's repository contract
 type UserRepository interface {
 	FindUser(email string) (model.UserResponse, error)
+	AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils.Metadata, error)
 	InsertUser(user model.User) (int, error)
 	StoreVerificationDetails(email string, code int) error
 	VerifyAccount(email string, code int) error
@@ -216,7 +218,7 @@ func (c *userRepo) FilterEventsBy(sex string, cusat_only string, free string) ([
 				free
 				FROM events WHERE approved = true AND cusat_only = $1 AND sex = $2;`
 
-	rows, err := c.db.Query(query, cusat_only,sex)
+	rows, err := c.db.Query(query, cusat_only, sex)
 
 	if err != nil {
 		return nil, err
@@ -357,3 +359,62 @@ func (c *userRepo) AskQuestion(question model.FAQA) error {
 // 	answer
 // 	FROM faqas where public = true and event_name = $1, `
 // }
+
+
+
+
+func(c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils.Metadata, error) {
+
+
+	var users []model.UserResponse
+
+	query := `SELECT 
+				COUNT(*) OVER(),
+				id,
+				first_name,
+				last_name,
+				email,
+				password,
+				phone,
+				profile
+				FROM users 
+				LIMIT $1 OFFSET $2`
+
+	rows, err := c.db.Query(query, pagenation.Limit(), pagenation.Offset())
+	if err != nil {
+		return nil, utils.Metadata{}, err
+	}
+
+	var totalRecords int
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var user model.UserResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&user.Username,
+			&user.First_Name,
+			&user.Last_Name,
+			&user.Email,
+			&user.Password,
+			&user.Phone,
+			&user.Profile,
+		)
+
+		if err != nil {
+			return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), err
+	}
+	log.Println(users)
+	log.Println(utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize))
+	return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), nil
+
+
+}
