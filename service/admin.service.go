@@ -15,6 +15,7 @@ type AdminService interface {
 	FindAdmin(username string) (*model.AdminResponse, error)
 	AllUsers(pagenation utils.Filter) (*[]model.UserResponse, *utils.Metadata, error)
 	ApproveEvent(title string) error
+	AllEventsInAdminPanel(pagenation utils.Filter, approved string) (*[]model.EventResponse, *utils.Metadata, error)
 }
 
 // adminService is the struct for admin service
@@ -89,4 +90,14 @@ func (c *adminService) AllUsers(pagenation utils.Filter) (*[]model.UserResponse,
 	}
 
 	return &users, &metadata, nil
+}
+
+func (c *adminService) AllEventsInAdminPanel(pagenation utils.Filter, approved string) (*[]model.EventResponse, *utils.Metadata, error) {
+
+	events, metadata, err := c.adminRepo.AllEventsInAdminPanel(pagenation,approved)
+	if err != nil {
+		return nil, &metadata, err
+	}
+
+	return &events, &metadata, nil
 }

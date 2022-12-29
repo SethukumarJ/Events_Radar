@@ -24,6 +24,13 @@ type UserService interface {
 	AllEvents() (*[]model.EventResponse, error)
 	AskQuestion(newQuestion model.FAQA) error
 	GetFaqa(event_name string) (*[]model.FAQAResponse, error)
+	GetQuestions(event_name string) (*[]model.FAQAResponse, error)
+	Answer(faqa model.FAQA, id string) error
+	PostedEvents(organizer_name string) (*[]model.EventResponse,error)
+	UpdateUserinfo(user model.User ,username string) error
+	UpdatePassword(user model.User ,email string, username string) error
+	DeleteEvent(title string) error
+
 }
 
 type userService struct {
@@ -183,4 +190,61 @@ func (c *userService) GetFaqa(event_name string) (*[]model.FAQAResponse, error) 
 }
 
 
+func (c *userService) GetQuestions(event_name string) (*[]model.FAQAResponse, error) {
+	faqa, err := c.userRepo.GetQuestions(event_name)
 
+	if err != nil {
+		return nil, err
+	}
+
+	return &faqa, nil
+}
+
+
+func (c *userService) Answer(faqa model.FAQA ,id string) error{
+	c.userRepo.Answer(faqa,id)
+	
+	return nil
+
+
+}
+
+
+func (c *userService) PostedEvents(organizer_name string) (*[]model.EventResponse,error) {
+
+	events, err := c.userRepo.PostedEvents(organizer_name)
+	// log.Println("metadata from service", metadata)
+	if err != nil {
+		return nil, err
+	}
+
+	return &events, nil
+}
+
+
+func (c *userService) UpdateUserinfo(user model.User ,username string) error{
+	c.userRepo.UpdateUserinfo(user, username)
+	
+	return nil
+
+
+}
+func (c *userService) UpdatePassword(user model.User ,email string, username string) error{
+
+
+	user.Password = HashPassword(user.Password)
+	fmt.Println("password", user.Password)
+	c.userRepo.UpdatePassword(user, email, username)
+	
+	return nil
+
+
+}
+
+func (c *userService) DeleteEvent(title string) error{
+	c.userRepo.DeleteEvent(title)
+	
+	return nil
+
+
+}

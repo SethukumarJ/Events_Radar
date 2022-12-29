@@ -35,7 +35,13 @@ func (r *userRoute) UserRouter(routes chi.Router,
 	routes.Get("/user/FilterEventsBy",userHandler.FilterEventsBy())
 	routes.Post("/user/AskQuestion",userHandler.AskQuestion())
 	routes.Get("/user/GetFaqa", userHandler.GetFaqa())
-	// routes.Post("/auth/google", authHandler.GoogleSignin())
+	routes.Get("/organizer/GetQuestions", userHandler.GetQuestions())
+	routes.Patch("/organizer/Answer", userHandler.Answer())
+	routes.Get("/user/PostedEvents",userHandler.PostedEvents())
+	routes.Patch("/user/updateinfo", userHandler.UpdateUserinfo())
+	routes.Patch("/user/updatePassword",userHandler.UpdatePassword())
+	routes.Delete("/event/delete",userHandler.DeleteEvent())
+	// routes.Pot("/auth/google", authHandler.GoogleSignin())
 	
 
 	routes.Group(func(r chi.Router) {

@@ -20,6 +20,12 @@ type UserHandler interface {
 	AllEvents()  http.HandlerFunc
 	AskQuestion() http.HandlerFunc
 	GetFaqa() http.HandlerFunc
+	GetQuestions() http.HandlerFunc
+	Answer() http.HandlerFunc
+	PostedEvents() http.HandlerFunc
+	UpdateUserinfo() http.HandlerFunc
+	UpdatePassword() http.HandlerFunc 
+	DeleteEvent() http.HandlerFunc 
 }
 
 type userHandler struct {
@@ -220,5 +226,157 @@ func (c *userHandler) GetFaqa() http.HandlerFunc {
 		utils.ResponseJSON(w, response)
 
 		
+	}
+}
+
+func (c *userHandler) GetQuestions() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+
+		event_name := r.URL.Query().Get("Event_name")
+
+		faqas, err := c.userService.GetQuestions(event_name)
+
+		result := struct {
+			Faqas *[]model.FAQAResponse
+		}{
+			Faqas: faqas,
+		}
+
+		if err != nil {
+			response := response.ErrorResponse("error while getting posts from database", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "All Events", result)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+		
+	}
+}
+
+
+
+func (c *userHandler) Answer() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var newAnswer model.FAQA
+		json.NewDecoder(r.Body).Decode(&newAnswer)
+		newAnswer.Event_name = (r.Header.Get("Event_name"))
+		id := r.URL.Query().Get("id")
+		 err := c.userService.Answer(newAnswer, id)
+		if err != nil {
+			response := response.ErrorResponse("Failed to add new answer", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+		response := response.SuccessResponse(true, "SUCCESS", newAnswer)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+	}
+}
+
+
+func (c *userHandler) PostedEvents() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		user_name := r.URL.Query().Get("Username")
+	
+		fmt.Println("free from handlers:",user_name)
+	
+
+		events, err := c.userService.PostedEvents(user_name)
+
+		result := struct {
+			Events *[]model.EventResponse
+		}{
+			Events: events,
+		}
+
+		if err != nil {
+			response := response.ErrorResponse("error while getting posts from database", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, "All Events", result)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+	}
+}
+
+
+func (c *userHandler) UpdateUserinfo() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var updateUser model.User
+		json.NewDecoder(r.Body).Decode(&updateUser)
+		
+		username := r.URL.Query().Get("username")
+		 err := c.userService.UpdateUserinfo(updateUser, username)
+		if err != nil {
+			response := response.ErrorResponse("Failed to apdate user", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+		response := response.SuccessResponse(true, "SUCCESS", updateUser)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+	}
+}
+
+
+func (c *userHandler) UpdatePassword() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var updatePassword model.User
+		json.NewDecoder(r.Body).Decode(&updatePassword)
+		
+		username := r.URL.Query().Get("username")
+		email := r.URL.Query().Get("email")
+		 err := c.userService.UpdatePassword(updatePassword, email, username)
+		if err != nil {
+			response := response.ErrorResponse("Failed to apdate password", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			utils.ResponseJSON(w, response)
+			return
+		}
+		response := response.SuccessResponse(true, "SUCCESS", updatePassword)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+	}
+}
+
+
+func (c *userHandler) DeleteEvent() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		title := r.URL.Query().Get("Title")
+		
+
+		err := c.userService.DeleteEvent(title)
+
+		if err != nil {
+			response := response.ErrorResponse("Verification failed, Invalid OTP", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+		response := response.SuccessResponse(true, "Deleted event successfully!", title)
+		utils.ResponseJSON(w, response)
 	}
 }

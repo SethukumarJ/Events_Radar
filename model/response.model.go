@@ -47,13 +47,14 @@ type EventResponse struct {
 }
 
 type FAQAResponse struct {
-	gorm.Model
-	Event_name string `json:"event_name"`
-	Question   string `json:"question"`
-	Username   string `json:"username"`
-	Answer     string `json:"answer"`
-	Public     bool   `json:"public"`
-	Date       string `json:"date"`
+	Id         int       `json:"id"`
+	Event_name string    `json:"event_name"`
+	CreatedAt  time.Time `json:"createdat"`
+	Question   string    `json:"question"`
+	Username   string    `json:"username"`
+	Answer     string    `json:"answer"`
+	Public     bool      `json:"public"`
+	Date       string    `json:"date"`
 }
 
 // type BioResponse struct {

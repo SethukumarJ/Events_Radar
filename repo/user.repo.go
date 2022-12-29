@@ -23,6 +23,12 @@ type UserRepository interface {
 	AllEvents() ([]model.EventResponse, error)
 	AskQuestion(question model.FAQA) error
 	GetFaqa(event_name string) ([]model.FAQAResponse, error)
+	GetQuestions(event_name string) ([]model.FAQAResponse, error)
+	Answer(faqa model.FAQA, id string) error 
+	PostedEvents(organizer_name string) ([]model.EventResponse, error)
+	UpdateUserinfo(user model.User, username string) (error)
+	UpdatePassword(user model.User,email string, username string) error
+	DeleteEvent(title string) error
 }
 
 // UserRepo is a struct that represent the UserRepo's repository
@@ -43,6 +49,7 @@ func (c *userRepo) InsertUser(user model.User) (int, error) {
 	var id int
 
 	query := `INSERT INTO users(
+			username,
 			first_name,
 			last_name,
 			email,
@@ -54,6 +61,7 @@ func (c *userRepo) InsertUser(user model.User) (int, error) {
 			RETURNING id;`
 
 	err := c.db.QueryRow(query,
+		user.Username,
 		user.First_Name,
 		user.Last_Name,
 		user.Email,
@@ -332,18 +340,18 @@ func (c *userRepo) AllEvents() ([]model.EventResponse, error) {
 func (c *userRepo) AskQuestion(question model.FAQA) error {
 
 	query := `INSERT INTO faqas(
-				created_at,
-				question,
-				event_name,
-				user_name)
-				VALUES 
-				($1, $2, $3, $4);`
-
+		created_at,
+		question,
+		event_name,
+		username)VALUES
+			($1, $2, $3, $4);`
 	err := c.db.QueryRow(query,
 		question.CreatedAt,
 		question.Question,
 		question.Event_name,
 		question.Username)
+
+		fmt.Println("question :",question.Question)
 	log.Println("error : ", err)
 	if err == nil {
 		return errors.New("Failed to post queston!")
@@ -354,17 +362,20 @@ func (c *userRepo) AskQuestion(question model.FAQA) error {
 func (c *userRepo) GetFaqa(event_name string) ([]model.FAQAResponse, error) {
 
 	var faqas []model.FAQAResponse
-
-	query := `SELECT
+	fmt.Println("Getquestion called")
+	query := `SELECT 
 	COUNT(*) OVER(),
-	created_at
+	id,
+	event_name,
+	created_at,
 	username,
 	question,
 	answer
-	FROM faqas where public = true and event_name = $1, `
-	
+	FROM faqas WHERE public = $1 AND event_name = $2;`
 
-	rows, err := c.db.Query(query)
+	rows, err := c.db.Query(query,true,event_name)
+
+	fmt.Println("rows",rows)
 
 	if err != nil {
 		return nil, err
@@ -379,6 +390,8 @@ func (c *userRepo) GetFaqa(event_name string) ([]model.FAQAResponse, error) {
 
 		err = rows.Scan(
 			&totalRecords,
+			&Faqas.Id,
+			&Faqas.Event_name,
 			&Faqas.CreatedAt,
 			&Faqas.Username,
 			&Faqas.Question,
@@ -388,63 +401,86 @@ func (c *userRepo) GetFaqa(event_name string) ([]model.FAQAResponse, error) {
 		if err != nil {
 			return faqas, err
 		}
-		 faqas = append(faqas, Faqas)
+		faqas = append(faqas, Faqas)
 	}
 
+	fmt.Println(faqas)
 	log.Println(faqas)
 
-	return  faqas, nil
+	return faqas, nil
 
+}
+
+
+
+func (c *userRepo) GetQuestions(event_name string) ([]model.FAQAResponse, error) {
+
+	var faqas []model.FAQAResponse
+	fmt.Println("Getquestion called")
+	query := `SELECT 
+	COUNT(*) OVER(),
+	id,
+	event_name,
+	created_at,
+	username,
+	question
+	FROM faqas WHERE public = $1 AND event_name = $2;`
+
+	rows, err := c.db.Query(query,false,event_name)
+
+	fmt.Println("rows",rows)
+
+	if err != nil {
+		return nil, err
 	}
 
+	var totalRecords int
 
-	func (c *userRepo) GetQuestions(username string, event_name string) ([]model.FAQAResponse, error) {
+	defer rows.Close()
 
-		var faqas []model.FAQAResponse
-	
-		query := `SELECT
-		COUNT(*) OVER(),
-		event_name ,
-		created_at
-		username,
-		question
-		FROM faqas where public = false AND event_name = $1;`
-		
-	
-		rows, err := c.db.Query(query)
-	
+	for rows.Next() {
+		var Faqas model.FAQAResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&Faqas.Id,
+			&Faqas.Event_name,
+			&Faqas.CreatedAt,
+			&Faqas.Username,
+			&Faqas.Question,
+		)
+
 		if err != nil {
-			return nil, err
+			return faqas, err
 		}
-	
-		var totalRecords int
-	
-		defer rows.Close()
-	
-		for rows.Next() {
-			var Faqas model.FAQAResponse
-	
-			err = rows.Scan(
-				&totalRecords,
-				&Faqas.Event_name,
-				&Faqas.CreatedAt,
-				&Faqas.Username,
-				&Faqas.Question,
-			)
-	
-			if err != nil {
-				return faqas, err
-			}
-			 faqas = append(faqas, Faqas)
-		}
-	
-		log.Println(faqas)
-	
-		return  faqas, nil
-	
-		}
-	
+		faqas = append(faqas, Faqas)
+	}
 
+	fmt.Println(faqas)
+	log.Println(faqas)
+
+	return faqas, nil
+
+}
+
+func (c *userRepo) Answer(faqa model.FAQA,id string) error {
+
+
+
+	query := `UPDATE faqas SET
+	public = true,
+	answer = $1
+	WHERE id = $2 AND
+	event_name = $3;`
+	err := c.db.QueryRow(query, faqa.Answer,id,faqa.Event_name).Err()
+	log.Println("Updating faqas answer: ", err)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
 
 func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils.Metadata, error) {
 
@@ -460,8 +496,8 @@ func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, util
 				password,
 				phone,
 				profile
-				FROM users 
-				LIMIT $1 OFFSET $2`
+				FROM users WHERE verification= false
+				LIMIT $1 OFFSET $2;`
 
 	rows, err := c.db.Query(query, pagenation.Limit(), pagenation.Offset())
 	fmt.Println("rows", rows)
@@ -506,3 +542,133 @@ func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, util
 	return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), nil
 
 }
+
+
+
+func (c *userRepo) PostedEvents(organizer_name string) ([]model.EventResponse, error) {
+
+	var events []model.EventResponse
+
+	query := `SELECT 
+				COUNT(*) OVER(),
+				created_at,
+				organizer_name,
+				title,
+				event_pic,
+				event_date,
+				location,
+				offline,
+				short_description,
+				long_description,
+				application_link,
+				website_link,
+				application_closing_date,
+				sub_events,
+				free
+				FROM events WHERE approved = true AND organizer_name = $1;`
+
+	rows, err := c.db.Query(query,organizer_name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var totalRecords int
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var Event model.EventResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&Event.Created_at,
+			&Event.Organizer_name,
+			&Event.Title,
+			&Event.Event_pic,
+			&Event.Event_date,
+			&Event.Location,
+			&Event.Offline,
+			&Event.Short_description,
+			&Event.Long_description,
+			&Event.Application_link,
+			&Event.Website_link,
+			&Event.Application_closing_date,
+			&Event.Sub_events,
+			&Event.Free,
+		)
+
+		if err != nil {
+			return events, err
+		}
+		events = append(events, Event)
+	}
+
+	log.Println(events)
+
+	return events, nil
+
+}
+
+
+
+func (c *userRepo) UpdateUserinfo(user model.User, username string) (error) {
+
+
+	query := `Update users SET
+			username = $1,
+			email = $2,
+			phone = $3,
+			profile = $4
+			WEHRE username = $5`
+
+	err := c.db.QueryRow(query,
+		user.Username,
+		user.Email,
+		user.Phone,
+		user.Profile,
+		username).Err()
+		
+		log.Println("Updating userinfo: ", err)
+		if err != nil {
+			return err
+		}
+	
+		return nil
+	}
+
+
+	func (c *userRepo) UpdatePassword(user model.User,email string, username string) (error) {
+
+
+		query := `Update users SET
+				password = $1,
+				WEHRE email = $2 OR username = $3`
+	
+		err := c.db.QueryRow(query,
+			user.Password,
+			email,
+			username).Err()
+			
+			log.Println("Updating userpassword: ", err)
+			if err != nil {
+				return err
+			}
+		
+			return nil
+		}
+
+
+		func (c *userRepo) DeleteEvent(title string) error {
+
+				query := `DELETE FROM events
+						    WHERE title = $1;`
+
+			    err := c.db.QueryRow(query,title).Err()
+				log.Println("Deleted event : ", err)
+					if err != nil {
+				return err
+				}
+		
+			return nil
+		}
