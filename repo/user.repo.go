@@ -57,7 +57,7 @@ func (c *userRepo) InsertUser(user model.User) (int, error) {
 			password,
 			profile)
 			VALUES
-			($1, $2, $3, $4, $5, $6)
+			($1, $2, $3, $4, $5, $6,$7)
 			RETURNING id;`
 
 	err := c.db.QueryRow(query,
@@ -489,14 +489,13 @@ func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, util
 
 	query := `SELECT 
 				COUNT(*) OVER(),
-				
 				first_name,
 				last_name,
 				email,
 				password,
 				phone,
 				profile
-				FROM users WHERE verification= false
+				FROM users
 				LIMIT $1 OFFSET $2;`
 
 	rows, err := c.db.Query(query, pagenation.Limit(), pagenation.Offset())

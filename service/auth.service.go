@@ -1,10 +1,12 @@
 package service
 
 import (
-	"crypto/md5"
 	"errors"
 	"fmt"
+	"log"
 	"radar/repo"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // AuthService is the interface for authentication service
@@ -42,7 +44,10 @@ func (c *authService) VerifyAdmin(email, password string) error {
 		return errors.New("Invalid Username/ password, failed to login")
 	}
 
-	isValidPassword := VerifyPassword(password, admin.Password)
+	fmt.Println("adminpassword", admin.Password)
+	fmt.Println("password:", password)
+
+	isValidPassword := VerifyPassword(admin.Password, []byte(password))
 	if !isValidPassword {
 		return errors.New("Invalid username/ Password, failed to login")
 	}
@@ -59,7 +64,7 @@ func (c *authService) VerifyUser(email string, password string) error {
 		return errors.New("failed to login. check your email")
 	}
 
-	isValidPassword := VerifyPassword(password, user.Password)
+	isValidPassword := VerifyPassword( user.Password,[]byte(password))
 	if !isValidPassword {
 		return errors.New("failed to login. check your credential")
 	}
@@ -67,9 +72,24 @@ func (c *authService) VerifyUser(email string, password string) error {
 	return nil
 }
 
-// VerifyPassword verifies the password
-func VerifyPassword(requestPassword, dbPassword string) bool {
+// // VerifyPassword verifies the password
+// func VerifyPassword(requestPassword, dbPassword string) bool {
 
-	requestPassword = fmt.Sprintf("%x", md5.Sum([]byte(requestPassword)))
-	return requestPassword == dbPassword
+// 	fmt.Println(requestPassword)
+// 	requestPassword = HashPassword(requestPassword)
+// 	fmt.Println(requestPassword)
+// 	return requestPassword == dbPassword
+// }
+
+func VerifyPassword(hashedPwd string, plainPwd []byte) bool {
+	// Since we'll be getting the hashed password from the DB it
+	// will be a string so we'll need to convert it to a byte slice
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	return true
 }

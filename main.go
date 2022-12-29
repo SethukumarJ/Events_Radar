@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,10 +10,10 @@ import (
 	"radar/repo"
 	"radar/routes"
 	"radar/service"
-	
+
 	h "radar/handler"
 	m "radar/middleware"
-	
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/subosito/gotenv"
@@ -48,13 +49,13 @@ func main() {
 		db         *sql.DB           = config.ConnectDB()
 		mailConfig config.MailConfig = config.NewMailConfig()
 		//validate    *validator.Validate    = validator.New()
-		adminRepo repo.AdminRepository 		= repo.NewAdminRepo(db)
-		userRepo  repo.UserRepository  		= repo.NewUserRepo(db)
-		jwtAdminService service.JWTService 	= service.NewJWTAdminService()
-		jwtUserService  service.JWTService 	= service.NewJWTUserService()
-		authService  service.AuthService  	= service.NewAuthService(adminRepo, userRepo)
-		adminService service.AdminService 	= service.NewAdminService(adminRepo, userRepo)
-		userService  service.UserService  	= service.NewUserService(userRepo, adminRepo, mailConfig)
+		adminRepo       repo.AdminRepository = repo.NewAdminRepo(db)
+		userRepo        repo.UserRepository  = repo.NewUserRepo(db)
+		jwtAdminService service.JWTService   = service.NewJWTAdminService()
+		jwtUserService  service.JWTService   = service.NewJWTUserService()
+		authService     service.AuthService  = service.NewAuthService(adminRepo, userRepo)
+		adminService    service.AdminService = service.NewAdminService(adminRepo, userRepo)
+		userService     service.UserService  = service.NewUserService(userRepo, adminRepo, mailConfig)
 
 		authHandler h.AuthHandler = h.NewAuthHandler(jwtAdminService,
 			jwtUserService,
@@ -63,12 +64,12 @@ func main() {
 			userService,
 		)
 		//validate)
-		adminMiddleware m.Middleware 	= m.NewMiddlewareAdmin(jwtAdminService)
-		userMiddleware  m.Middleware 	= m.NewMiddlewareUser(jwtUserService)
-		adminHandler h.AdminHandler 	= h.NewAdminHandler(adminService, userService)
-		userHandler  h.UserHandler  	= h.NewUserHandler(userService)
-		adminRoute routes.AdminRoute 	= routes.NewAdminRoute()
-		userRoute  routes.UserRoute  	= routes.NewUserRoute()
+		adminMiddleware m.Middleware      = m.NewMiddlewareAdmin(jwtAdminService)
+		userMiddleware  m.Middleware      = m.NewMiddlewareUser(jwtUserService)
+		adminHandler    h.AdminHandler    = h.NewAdminHandler(adminService, userService)
+		userHandler     h.UserHandler     = h.NewUserHandler(userService)
+		adminRoute      routes.AdminRoute = routes.NewAdminRoute()
+		userRoute       routes.UserRoute  = routes.NewUserRoute()
 	)
 
 	//routing
@@ -83,7 +84,7 @@ func main() {
 		userHandler,
 		userMiddleware)
 
-	log.Println("Api is listening on port:", port)
+	fmt.Println("Api is listening on port:", port)
 	// Starting server
 	http.ListenAndServe(":"+port, router)
 

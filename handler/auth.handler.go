@@ -93,7 +93,10 @@ func (c *authHandler) AdminLogin() http.HandlerFunc {
 
 		json.NewDecoder(r.Body).Decode(&adminLogin)
 
-		//verifying  admin credentials
+
+		fmt.Println("adminLogin.passwrodk",adminLogin.Password)
+		fmt.Println("adminLogin.username",adminLogin.Username)
+		//verify User details
 		err := c.authService.VerifyAdmin(adminLogin.Username, adminLogin.Password)
 
 		if err != nil {
@@ -104,13 +107,15 @@ func (c *authHandler) AdminLogin() http.HandlerFunc {
 			return
 		}
 
-		//getting admin values
+		//fetching user details
 		admin, _ := c.adminService.FindAdmin(adminLogin.Username)
-		token := c.jwtAdminService.GenerateToken(admin.ID, admin.Username, "admin")
+		token := c.jwtUserService.GenerateToken(admin.ID, admin.Username, "admin")
 		admin.Password = ""
 		admin.Token = token
 		response := response.SuccessResponse(true, "SUCCESS", admin.Token)
 		utils.ResponseJSON(w, response)
+
+		fmt.Println("login function returned successfully")
 	}
 
 }

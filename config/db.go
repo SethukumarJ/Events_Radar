@@ -23,11 +23,11 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&model.Event{})
 	db.AutoMigrate(&model.FAQA{})
 
-	db.Exec(`INSERT INTO admins (
-				username,password)
-			VALUES (
-				$1,$2)`,
-		"admin@gmail.com", "admin")
+	// db.Exec(`INSERT INTO admins (
+	// 			username,password)
+	// 		VALUES (
+	// 			$1,$2)`,
+	// 	"admin@gmail.com", "admin")
 
 	return db
 

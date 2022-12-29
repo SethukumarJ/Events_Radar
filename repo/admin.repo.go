@@ -91,7 +91,7 @@ func (c *adminRepo) ApproveEvent(title string) error {
 
 func (c *adminRepo) AllEventsInAdminPanel(pagenation utils.Filter, approved string) ([]model.EventResponse, utils.Metadata, error) {
 
-	fmt.Println("allusers called from repo")
+	fmt.Println("allevents called from repo")
 	var events []model.EventResponse
 
 	query := `SELECT 
@@ -109,21 +109,23 @@ func (c *adminRepo) AllEventsInAdminPanel(pagenation utils.Filter, approved stri
 				website_link,
 				application_closing_date,
 				sub_events,
-				free WHERE approved = $1
+				free 
+				FROM events WHERE approved = $1
 				LIMIT $2 OFFSET $3;`
 
 	rows, err := c.db.Query(query, approved,pagenation.Limit(), pagenation.Offset())
+	fmt.Println("approved", approved)
 	fmt.Println("rows", rows)
 	if err != nil {
 		return nil, utils.Metadata{}, err
 	}
 
-	fmt.Println("allusers called from repo")
+	fmt.Println("allevents called from repo")
 
 	var totalRecords int
 
 	defer rows.Close()
-	fmt.Println("allusers called from repo")
+	fmt.Println("alllevents called from repo")
 
 	for rows.Next() {
 		var Event model.EventResponse
@@ -159,5 +161,11 @@ func (c *adminRepo) AllEventsInAdminPanel(pagenation utils.Filter, approved stri
 	log.Println(events)
 	log.Println(utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize))
 	return events, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), nil
+
+
+
+
+
+	
 
 }
