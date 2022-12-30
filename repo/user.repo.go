@@ -24,10 +24,10 @@ type UserRepository interface {
 	AskQuestion(question model.FAQA) error
 	GetFaqa(event_name string) ([]model.FAQAResponse, error)
 	GetQuestions(event_name string) ([]model.FAQAResponse, error)
-	Answer(faqa model.FAQA, id string) error 
+	Answer(faqa model.FAQA, id string) error
 	PostedEvents(organizer_name string) ([]model.EventResponse, error)
-	UpdateUserinfo(user model.User, username string) (error)
-	UpdatePassword(user model.User,email string, username string) error
+	UpdateUserinfo(user model.User, username string) error
+	UpdatePassword(user model.User, email string, username string) error
 	DeleteEvent(title string) error
 }
 
@@ -150,7 +150,7 @@ func (c *userRepo) VerifyAccount(email string, code int) error {
 
 	query = `DELETE FROM verifications WHERE email = $1;`
 
-	err = c.db.QueryRow(query,email).Err()
+	err = c.db.QueryRow(query, email).Err()
 	fmt.Println("deleting the verification code.")
 	if err != nil {
 		return err
@@ -359,7 +359,7 @@ func (c *userRepo) AskQuestion(question model.FAQA) error {
 		question.Event_name,
 		question.Username)
 
-		fmt.Println("question :",question.Question)
+	fmt.Println("question :", question.Question)
 	log.Println("error : ", err)
 	if err == nil {
 		return errors.New("Failed to post queston!")
@@ -381,9 +381,9 @@ func (c *userRepo) GetFaqa(event_name string) ([]model.FAQAResponse, error) {
 	answer
 	FROM faqas WHERE public = $1 AND event_name = $2;`
 
-	rows, err := c.db.Query(query,true,event_name)
+	rows, err := c.db.Query(query, true, event_name)
 
-	fmt.Println("rows",rows)
+	fmt.Println("rows", rows)
 
 	if err != nil {
 		return nil, err
@@ -419,8 +419,6 @@ func (c *userRepo) GetFaqa(event_name string) ([]model.FAQAResponse, error) {
 
 }
 
-
-
 func (c *userRepo) GetQuestions(event_name string) ([]model.FAQAResponse, error) {
 
 	var faqas []model.FAQAResponse
@@ -434,9 +432,9 @@ func (c *userRepo) GetQuestions(event_name string) ([]model.FAQAResponse, error)
 	question
 	FROM faqas WHERE public = $1 AND event_name = $2;`
 
-	rows, err := c.db.Query(query,false,event_name)
+	rows, err := c.db.Query(query, false, event_name)
 
-	fmt.Println("rows",rows)
+	fmt.Println("rows", rows)
 
 	if err != nil {
 		return nil, err
@@ -471,16 +469,14 @@ func (c *userRepo) GetQuestions(event_name string) ([]model.FAQAResponse, error)
 
 }
 
-func (c *userRepo) Answer(faqa model.FAQA,id string) error {
-
-
+func (c *userRepo) Answer(faqa model.FAQA, id string) error {
 
 	query := `UPDATE faqas SET
 	public = true,
 	answer = $1
 	WHERE id = $2 AND
 	event_name = $3;`
-	err := c.db.QueryRow(query, faqa.Answer,id,faqa.Event_name).Err()
+	err := c.db.QueryRow(query, faqa.Answer, id, faqa.Event_name).Err()
 	log.Println("Updating faqas answer: ", err)
 	if err != nil {
 		return err
@@ -549,8 +545,6 @@ func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, util
 
 }
 
-
-
 func (c *userRepo) PostedEvents(organizer_name string) ([]model.EventResponse, error) {
 
 	var events []model.EventResponse
@@ -573,7 +567,7 @@ func (c *userRepo) PostedEvents(organizer_name string) ([]model.EventResponse, e
 				free
 				FROM events WHERE approved = true AND organizer_name = $1;`
 
-	rows, err := c.db.Query(query,organizer_name)
+	rows, err := c.db.Query(query, organizer_name)
 
 	if err != nil {
 		return nil, err
@@ -616,13 +610,11 @@ func (c *userRepo) PostedEvents(organizer_name string) ([]model.EventResponse, e
 
 }
 
+func (c *userRepo) UpdateUserinfo(user model.User, username string) error {
 
-
-func (c *userRepo) UpdateUserinfo(user model.User, username string) (error) {
-
-	fmt.Println("phone",user.Phone_number)
-	fmt.Println("email",user.Email)
-	fmt.Println("profile",user.Profile)
+	fmt.Println("phone", user.Phone_number)
+	fmt.Println("email", user.Email)
+	fmt.Println("profile", user.Profile)
 	query := `Update users SET
 			username = $1,
 			email = $2,
@@ -636,47 +628,44 @@ func (c *userRepo) UpdateUserinfo(user model.User, username string) (error) {
 		user.Phone_number,
 		user.Profile,
 		username).Err()
-		
-		fmt.Println("Updating userinfo: ", err)
-		if err != nil {
-			return err
-		}
-	
-		return nil
+
+	fmt.Println("Updating userinfo: ", err)
+	if err != nil {
+		return err
 	}
 
+	return nil
+}
 
-	func (c *userRepo) UpdatePassword(user model.User,email string, username string) (error) {
+func (c *userRepo) UpdatePassword(user model.User, email string, username string) error {
 
-
-		query := `Update users SET
+	query := `Update users SET
 				password = $1,
 				WEHRE email = $2 OR username = $3`
-	
-		err := c.db.QueryRow(query,
-			user.Password,
-			email,
-			username).Err()
-			
-			log.Println("Updating userpassword: ", err)
-			if err != nil {
-				return err
-			}
-		
-			return nil
-		}
 
+	err := c.db.QueryRow(query,
+		user.Password,
+		email,
+		username).Err()
 
-		func (c *userRepo) DeleteEvent(title string) error {
+	log.Println("Updating userpassword: ", err)
+	if err != nil {
+		return err
+	}
 
-				query := `DELETE FROM events
+	return nil
+}
+
+func (c *userRepo) DeleteEvent(title string) error {
+
+	query := `DELETE FROM events
 						    WHERE title = $1;`
 
-			    err := c.db.QueryRow(query,title).Err()
-				log.Println("Deleted event : ", err)
-					if err != nil {
-				return err
-				}
-		
-			return nil
-		}
+	err := c.db.QueryRow(query, title).Err()
+	log.Println("Deleted event : ", err)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

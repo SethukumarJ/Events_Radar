@@ -50,7 +50,7 @@ func NewUserService(
 	}
 }
 
-// CreateUser creates the user
+/// CreateUser creates the user
 func (c *userService) CreateUser(newUser model.User) error {
 
 	fmt.Println("create user from service")
