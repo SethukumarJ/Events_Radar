@@ -120,7 +120,7 @@ func (c *adminRepo) AllEventsInAdminPanel(pagenation utils.Filter, approved stri
 		return nil, utils.Metadata{}, err
 	}
 
-	fmt.Println("allevents called from repo")
+	fmt.Println("allusers called from repo")
 
 	var totalRecords int
 
@@ -162,10 +162,62 @@ func (c *adminRepo) AllEventsInAdminPanel(pagenation utils.Filter, approved stri
 	log.Println(utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize))
 	return events, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), nil
 
-
-
-
-
-	
-
 }
+
+
+// func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, utils.Metadata, error) {
+
+// 	fmt.Println("allusers called from repo")
+// 	var users []model.UserResponse
+
+// 	query := `SELECT 
+// 				COUNT(*) OVER(),
+// 				first_name,
+// 				last_name,
+// 				email,
+// 				phone,
+// 				profile
+// 				FROM users
+// 				LIMIT $1 OFFSET $2;`
+
+// 	rows, err := c.db.Query(query, pagenation.Limit(), pagenation.Offset())
+// 	fmt.Println("rows", rows)
+// 	if err != nil {
+// 		return nil, utils.Metadata{}, err
+// 	}
+
+// 	fmt.Println("allusers called from repo")
+
+// 	var totalRecords int
+
+// 	defer rows.Close()
+// 	fmt.Println("allusers called from repo")
+
+// 	for rows.Next() {
+// 		var User model.UserResponse
+// 		fmt.Println("username :", User.Username)
+// 		err = rows.Scan(
+// 			&totalRecords,
+// 			&User.First_Name,
+// 			&User.Last_Name,
+// 			&User.Email,
+// 			&User.Phone,
+// 			&User.Profile,
+// 		)
+
+// 		fmt.Println("username", User.Username)
+
+// 		if err != nil {
+// 			return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), err
+// 		}
+// 		users = append(users, User)
+// 	}
+
+// 	if err := rows.Err(); err != nil {
+// 		return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), err
+// 	}
+// 	log.Println(users)
+// 	log.Println(utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize))
+// 	return users, utils.ComputeMetaData(totalRecords, pagenation.Page, pagenation.PageSize), nil
+
+// }

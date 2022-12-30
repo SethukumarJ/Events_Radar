@@ -53,7 +53,7 @@ func (c *userRepo) InsertUser(user model.User) (int, error) {
 			first_name,
 			last_name,
 			email,
-			phone,
+			phone_number,
 			password,
 			profile)
 			VALUES
@@ -65,7 +65,7 @@ func (c *userRepo) InsertUser(user model.User) (int, error) {
 		user.First_Name,
 		user.Last_Name,
 		user.Email,
-		user.Phone,
+		user.Phone_number,
 		user.Password,
 		user.Profile).Scan(
 		&id,
@@ -86,7 +86,7 @@ func (c *userRepo) FindUser(email string) (model.UserResponse, error) {
 				last_name,
 				email,
 				password,
-				phone,
+				phone_number,
 				profile
 				FROM users 
 				WHERE email = $1;`
@@ -144,6 +144,14 @@ func (c *userRepo) VerifyAccount(email string, code int) error {
 				email = $2 ;`
 	err = c.db.QueryRow(query, true, email).Err()
 	log.Println("Updating User verification: ", err)
+	if err != nil {
+		return err
+	}
+
+	query = `DELETE FROM verifications WHERE email = $1;`
+
+	err = c.db.QueryRow(query,email).Err()
+	fmt.Println("deleting the verification code.")
 	if err != nil {
 		return err
 	}
@@ -491,9 +499,9 @@ func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, util
 				COUNT(*) OVER(),
 				first_name,
 				last_name,
+				username,
 				email,
-				password,
-				phone,
+				phone_number,
 				profile
 				FROM users
 				LIMIT $1 OFFSET $2;`
@@ -516,11 +524,10 @@ func (c *userRepo) AllUsers(pagenation utils.Filter) ([]model.UserResponse, util
 		fmt.Println("username :", User.Username)
 		err = rows.Scan(
 			&totalRecords,
-
 			&User.First_Name,
 			&User.Last_Name,
+			&User.Username,
 			&User.Email,
-			&User.Password,
 			&User.Phone,
 			&User.Profile,
 		)
@@ -613,22 +620,24 @@ func (c *userRepo) PostedEvents(organizer_name string) ([]model.EventResponse, e
 
 func (c *userRepo) UpdateUserinfo(user model.User, username string) (error) {
 
-
+	fmt.Println("phone",user.Phone_number)
+	fmt.Println("email",user.Email)
+	fmt.Println("profile",user.Profile)
 	query := `Update users SET
 			username = $1,
 			email = $2,
-			phone = $3,
+			phone_number = $3,
 			profile = $4
-			WEHRE username = $5`
+			WHERE username = $5`
 
 	err := c.db.QueryRow(query,
 		user.Username,
 		user.Email,
-		user.Phone,
+		user.Phone_number,
 		user.Profile,
 		username).Err()
 		
-		log.Println("Updating userinfo: ", err)
+		fmt.Println("Updating userinfo: ", err)
 		if err != nil {
 			return err
 		}

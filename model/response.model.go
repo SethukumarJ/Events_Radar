@@ -14,7 +14,7 @@ type UserResponse struct {
 	Last_Name  string `json:"last_name"`
 	Username   string `json:"username"`
 	Email      string `json:"email"`
-	Phone      int    `json:"phone_number"`
+	Phone      string `json:"phone_number"`
 	Password   string `json:"password,omitempty"`
 	Verified   bool   `json:"verified" gorm:"default:false"`
 	Profile    string `json:"profile"`

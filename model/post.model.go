@@ -13,9 +13,9 @@ type User struct {
 	Id              int    `json:"user_id"`
 	First_Name      string `json:"first_name"`
 	Last_Name       string `json:"last_name"`
-	Username        string `json:"username" gorm:"primary key"`
+	Username        string `json:"username" gorm:"primary key unique"`
 	Email           string `json:"email" gorm:"not null;unique"`
-	Phone           int64  `json:"phone_number"`
+	Phone_number    string `json:"phone_number"`
 	Password        string `json:"password"`
 	Verified        bool   `json:"verified" gorm:"default:false"`
 	Verification    bool   `json:"verification" gorm:"default:false"`

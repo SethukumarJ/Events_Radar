@@ -224,6 +224,7 @@ func (c *userService) PostedEvents(organizer_name string) (*[]model.EventRespons
 
 func (c *userService) UpdateUserinfo(user model.User ,username string) error{
 	c.userRepo.UpdateUserinfo(user, username)
+	fmt.Println("user frm update userinfo services:",user)
 	
 	return nil
 
