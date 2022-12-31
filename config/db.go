@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"radar/model"
@@ -12,6 +13,7 @@ import (
 func Init() *gorm.DB {
 
 	dbURL := os.Getenv("DB_SOURCE")
+	fmt.Println("connected to:", dbURL)
 	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
