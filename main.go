@@ -65,10 +65,6 @@ func main() {
 
 	
 
-	// using logger to display each request
-	router.Use(middleware.Logger)
-
-	config.Init()
 
 	var (
 		db         *sql.DB           = config.ConnectDB()
