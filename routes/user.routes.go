@@ -41,6 +41,9 @@ func (r *userRoute) UserRouter(routes chi.Router,
 	routes.Patch("/user/updateinfo", userHandler.UpdateUserinfo())
 	routes.Patch("/user/updatePassword",userHandler.UpdatePassword())
 	routes.Delete("/event/delete",userHandler.DeleteEvent())
+	routes.Get("/user/GetEventByTitle", userHandler.GetEventByTitle())
+	routes.Get("/auth/{google}/callback", authHandler.GetUser())
+	routes.Get("/auth/{{provider:[a-z-]+}}", authHandler.AuthBigginer())
 	// routes.Pot("/auth/google", authHandler.GoogleSignin())
 	
 

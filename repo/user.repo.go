@@ -27,6 +27,7 @@ type UserRepository interface {
 	Answer(faqa model.FAQA, id string) error
 	PostedEvents(organizer_name string) ([]model.EventResponse, error)
 	UpdateUserinfo(user model.User, username string) error
+	GetEventByTitle(title string) ([]model.EventResponse, error)
 	UpdatePassword(user model.User, email string, username string) error
 	DeleteEvent(title string) error
 }
@@ -303,6 +304,71 @@ func (c *userRepo) AllEvents() ([]model.EventResponse, error) {
 				FROM events WHERE approved = true;`
 
 	rows, err := c.db.Query(query)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var totalRecords int
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var Event model.EventResponse
+
+		err = rows.Scan(
+			&totalRecords,
+			&Event.Created_at,
+			&Event.Organizer_name,
+			&Event.Title,
+			&Event.Event_pic,
+			&Event.Event_date,
+			&Event.Location,
+			&Event.Offline,
+			&Event.Short_description,
+			&Event.Long_description,
+			&Event.Application_link,
+			&Event.Website_link,
+			&Event.Application_closing_date,
+			&Event.Sub_events,
+			&Event.Free,
+		)
+
+		if err != nil {
+			return events, err
+		}
+		events = append(events, Event)
+	}
+
+	log.Println(events)
+
+	return events, nil
+
+}
+
+func (c *userRepo) GetEventByTitle(title string) ([]model.EventResponse, error) {
+
+	var events []model.EventResponse
+
+	query := `SELECT 
+				COUNT(*) OVER(),
+				created_at,
+				organizer_name,
+				title,
+				event_pic,
+				event_date,
+				location,
+				offline,
+				short_description,
+				long_description,
+				application_link,
+				website_link,
+				application_closing_date,
+				sub_events,
+				free
+				FROM events WHERE approved = true AND title = $1;`
+
+	rows, err := c.db.Query(query,title)
 
 	if err != nil {
 		return nil, err

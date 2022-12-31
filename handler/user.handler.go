@@ -26,6 +26,7 @@ type UserHandler interface {
 	UpdateUserinfo() http.HandlerFunc
 	UpdatePassword() http.HandlerFunc 
 	DeleteEvent() http.HandlerFunc 
+	GetEventByTitle() http.HandlerFunc
 }
 
 type userHandler struct {
@@ -134,6 +135,38 @@ func (c *userHandler) FilterEventsBy() http.HandlerFunc {
 		}
 
 		response := response.SuccessResponse(true, "All Events", result)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		utils.ResponseJSON(w, response)
+
+	}
+}
+
+func (c *userHandler) GetEventByTitle() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		title := r.URL.Query().Get("title")
+	
+		fmt.Println("free from handlers:",title)
+	
+
+		events, err := c.userService.GetEventByTitle(title)
+
+		result := struct {
+			Events *[]model.EventResponse
+		}{
+			Events: events,
+		}
+
+		if err != nil {
+			response := response.ErrorResponse("error while getting posts from database", err.Error(), nil)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			utils.ResponseJSON(w, response)
+			return
+		}
+
+		response := response.SuccessResponse(true, " Events", result)
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		utils.ResponseJSON(w, response)

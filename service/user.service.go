@@ -21,6 +21,7 @@ type UserService interface {
 	VerifyAccount(email string, code int) error
 	CreateEvent(newEvent model.Event) (string, error)
 	FilterEventsBy(sex string,cusat_only string, free string) (*[]model.EventResponse,error)
+	GetEventByTitle(title string) (*[]model.EventResponse,error)
 	AllEvents() (*[]model.EventResponse, error)
 	AskQuestion(newQuestion model.FAQA) error
 	GetFaqa(event_name string) (*[]model.FAQAResponse, error)
@@ -149,6 +150,17 @@ func (c *userService) CreateEvent(newEvent model.Event) (string, error) {
 func (c *userService) FilterEventsBy(sex string,cusat_only string, free string) (*[]model.EventResponse,error) {
 
 	events, err := c.userRepo.FilterEventsBy( sex, cusat_only,free)
+	// log.Println("metadata from service", metadata)
+	if err != nil {
+		return nil, err
+	}
+
+	return &events, nil
+}
+
+func (c *userService) GetEventByTitle(title string) (*[]model.EventResponse,error) {
+
+	events, err := c.userRepo.GetEventByTitle(title)
 	// log.Println("metadata from service", metadata)
 	if err != nil {
 		return nil, err
