@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -11,10 +12,8 @@ import (
 	"radar/service"
 	"radar/utils"
 	"strings"
-	"text/template"
 
 	"github.com/gorilla/pat"
-	"github.com/gorilla/sessions"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/google"
@@ -93,9 +92,8 @@ func (c *authHandler) AdminLogin() http.HandlerFunc {
 
 		json.NewDecoder(r.Body).Decode(&adminLogin)
 
-
-		fmt.Println("adminLogin.passwrodk",adminLogin.Password)
-		fmt.Println("adminLogin.username",adminLogin.Username)
+		fmt.Println("adminLogin.passwrodk", adminLogin.Password)
+		fmt.Println("adminLogin.username", adminLogin.Username)
 		//verify User details
 		err := c.authService.VerifyAdmin(adminLogin.Username, adminLogin.Password)
 
@@ -259,17 +257,7 @@ func (u *authHandler) GoogleSignin() {
 	fmt.Println(SECRET_KEY)
 	fmt.Println(REDIRECT_URL)
 
-	key := SECRET_KEY // Replace with your SESSION_SECRET or similar
-	maxAge := 8 * 30  // 30 days
-	isProd := false   // Set to true when serving over https
-
-	store := sessions.NewCookieStore([]byte(key))
-	store.MaxAge(maxAge)
-	store.Options.Path = "/"
-	store.Options.HttpOnly = true // HttpOnly should always be enabled
-	store.Options.Secure = isProd
-
-	gothic.Store = store
+	// gothic.Store = store
 
 	goth.UseProviders(
 		google.New(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, "email", "profile"),
@@ -284,8 +272,7 @@ func (u *authHandler) GoogleSignin() {
 		t, _ := template.ParseFiles("Templates/index.html")
 		t.Execute(res, false)
 	})
-	log.Println("listening on localhost:3000")
-	log.Fatal(http.ListenAndServe(":3000", p))
+
 }
 
 func GetUser(res http.ResponseWriter, req *http.Request) {

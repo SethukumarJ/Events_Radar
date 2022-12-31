@@ -18,6 +18,8 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/subosito/gotenv"
+	"github.com/go-chi/cors"
+
 )
 
 //func init
@@ -60,7 +62,30 @@ func main() {
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Welcome to the API!"))
 	})
+		// Use the cors middleware to enable CORS for the routes.
+	// You can configure the options for the middleware using the cors.Options struct.
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
+	router.Use(cors.Handler)
 
+	// Add your routes as normal.
+	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Welcome to the API!"))
+	})
+
+
+	
+
+	// using logger to display each request
+	router.Use(middleware.Logger)
+
+	config.Init()
 
 	var (
 		db         *sql.DB           = config.ConnectDB()

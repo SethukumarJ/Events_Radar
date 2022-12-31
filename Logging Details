@@ -938,9 +938,11 @@ created by net/http.(*Server).Serve
 2022/12/30 10:55:59 1     4
 2022/12/30 10:55:59 [{{0 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0001-01-01 00:00:00 +0000 UTC false}} 0 sethu kumar SethukumarJ sethukumarj.76@gmail.com   false  }]
 2022/12/30 10:55:59 {1 4 1 1 1}
-2022/12/31 20:29:14 /nConnected to database events_radar
-2022/12/31 20:30:50 /nConnected to database events_radar
-2022/12/31 20:35:32 /nConnected to database events_radar
-2022/12/31 21:18:34 /nConnected to database events_radar
-2022/12/31 21:18:54 /nConnected to database events_radar
-2022/12/31 21:23:43 /nConnected to database events_radar
+2022/12/30 13:31:54 /nConnected to database events_radar
+2022/12/30 13:31:58 Email Id to send message :  sethukumarj.76@gmail.com
+2022/12/30 13:32:38 Updating User verification:  <nil>
+2022/12/30 13:43:36 /nConnected to database events_radar
+2022/12/30 22:54:57 /nConnected to database events_radar
+2022/12/30 23:19:59 /nConnected to database events_radar
+2022/12/31 10:03:25 /nConnected to database events_radar
+2022/12/31 20:09:30 /nConnected to database events_radar
