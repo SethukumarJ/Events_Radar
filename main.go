@@ -23,7 +23,7 @@ import (
 //func init
 
 func init() {
-	gotenv.Load()
+	gotenv.Load("prod.env")
 }
 
 func main() {
@@ -40,6 +40,11 @@ func main() {
 
 	// creating an instance of chi r
 	router := chi.NewRouter()
+		// using logger to display each request
+		router.Use(middleware.Logger)
+
+		config.Init()
+	
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
@@ -56,10 +61,6 @@ func main() {
 		w.Write([]byte("Welcome to the API!"))
 	})
 
-	// using logger to display each request
-	router.Use(middleware.Logger)
-
-	config.Init()
 
 	var (
 		db         *sql.DB           = config.ConnectDB()

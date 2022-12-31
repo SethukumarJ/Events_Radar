@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4561f85e-bfca-4649-8c06-f7763d5d7217" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Logging Details" beforeDir="false" afterPath="$PROJECT_DIR$/Logging Details" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/admin.handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/admin.handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user.handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user.handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/post.model.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/post.model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/admin.repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/admin.repo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/user.repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/user.repo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/admin.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/admin.routes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/user.routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.routes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/admin.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/admin.service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/user.service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/user.service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
