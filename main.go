@@ -49,10 +49,10 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	})
-	r.Use(cors.Handler)
+	router.Use(cors.Handler)
 
 	// Add your routes as normal.
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Welcome to the API!"))
 	})
 
