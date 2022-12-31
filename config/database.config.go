@@ -38,6 +38,7 @@ func ConnectDB() *sql.DB {
 	}
 
 	log.Println("/nConnected to database", databaseName)
+	fmt.Println("/mConnected to database", databaseName)
 
 	return db
 
